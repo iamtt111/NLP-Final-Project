@@ -20,6 +20,7 @@
 ```
 ├── qa.py                 # 主程式：批次 CSV → CSV
 ├── build_corpus.py       # 建立 BM25 索引
+├── run.bat               # 一鍵執行
 ├── settings.json         # 系統設定
 ├── requirements.txt      # Python 套件
 ├── .env                  # API 金鑰
@@ -56,7 +57,14 @@
 
 ## 快速開始
 
-### 1. 安裝
+### 一鍵執行
+
+將課程教材放入 `corpus/` 資料夾後，雙擊 `run.bat` 即可。
+首次執行會自動建立 venv、安裝套件、提示填入 API 金鑰、建立索引並執行問答。
+
+### 手動執行
+
+#### 1. 安裝
 
 ```bash
 python -m venv venv
@@ -66,7 +74,7 @@ venv\Scripts\activate        # Windows CMD
 pip install -r requirements.txt
 ```
 
-### 2. 設定 API 金鑰
+#### 2. 設定 API 金鑰
 
 ```bash
 cp .env.example .env
@@ -79,7 +87,10 @@ GROQ_API_KEY=...
 GEMINI_API_KEY=...
 ```
 
-### 3. 建立索引
+- **Groq**（主要）：到 [console.groq.com](https://console.groq.com) 免費申請
+- **Gemini**（備援）：到 [aistudio.google.com](https://aistudio.google.com/apikey) 免費申請
+
+#### 3. 建立索引
 
 將課程教材放入 `corpus/` 資料夾後：
 
@@ -87,7 +98,7 @@ GEMINI_API_KEY=...
 python build_corpus.py --corpus ./corpus
 ```
 
-### 4. 執行問答
+#### 4. 執行問答
 
 ```bash
 python qa.py --input input/questions.csv --output output/answers.csv --workers 4
