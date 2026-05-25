@@ -1,0 +1,16 @@
+# Core
+rank-bm25>=0.2.2
+jieba>=0.42.1
+
+# Parsers
+pypdf>=4.0.0
+python-docx>=1.1.0
+python-pptx>=0.6.23
+
+# LLM API clients
+groq>=0.11.0
+google-genai>=1.0.0
+
+# CLI / Data
+tqdm>=4.66.0
+python-dotenv>=1.0.0
