@@ -3,7 +3,7 @@ chcp 65001 >nul
 setlocal EnableDelayedExpansion
 
 echo ====================================
-echo   NLP QA System - Quick Start
+echo   NLP QA System - Web UI
 echo ====================================
 echo.
 
@@ -59,18 +59,17 @@ for %%a in (%*) do (
 )
 
 if "!NEED_REBUILD!"=="1" (
-    echo [3/4] Force rebuild requested.
+    echo [4/4] Force rebuild requested.
 ) else if not exist "data\bm25_cache.pkl" (
-    echo [3/4] No BM25 index found, building...
+    echo [4/4] No BM25 index found, building...
     set "NEED_REBUILD=1"
 ) else (
-    :: Use Python to compare corpus mtime vs cache mtime (reliable on Windows)
     python -c "import os,sys,pathlib;c=max((f.stat().st_mtime for f in pathlib.Path('corpus').rglob('*') if f.is_file()),default=0);k=os.path.getmtime('data/bm25_cache.pkl');sys.exit(0 if c>k else 1)" 2>nul
     if !errorlevel! equ 0 (
-        echo [3/4] Corpus has changed, rebuilding index...
+        echo [4/4] Corpus has changed, rebuilding index...
         set "NEED_REBUILD=1"
     ) else (
-        echo [3/4] BM25 index is up to date, skipping.
+        echo [4/4] BM25 index is up to date, skipping.
     )
 )
 
@@ -83,57 +82,10 @@ if "!NEED_REBUILD!"=="1" (
     )
 )
 
-:: 5. Select input CSV
+:: 5. Launch Streamlit
 echo.
-echo [4/4] Select input CSV:
-set "CSV_COUNT=0"
-for %%f in (input\*.csv) do (
-    set /a CSV_COUNT+=1
-    set "CSV_!CSV_COUNT!=%%f"
-    echo   !CSV_COUNT!. %%~nxf
-)
-
-if "!CSV_COUNT!"=="0" (
-    echo [ERROR] No CSV files found in input\ folder.
-    pause
-    exit /b 1
-)
-
-if "!CSV_COUNT!"=="1" (
-    set "SELECTED_CSV=!CSV_1!"
-    echo   Auto-selected: !SELECTED_CSV!
-) else (
-    set /p "CSV_CHOICE=Enter number (1-!CSV_COUNT!): "
-    call set "SELECTED_CSV=%%CSV_!CSV_CHOICE!%%"
-    if "!SELECTED_CSV!"=="" (
-        echo [ERROR] Invalid selection.
-        pause
-        exit /b 1
-    )
-)
-
-:: 6. Run QA
+echo Starting Streamlit UI...
+echo Open your browser at http://localhost:8501
 echo.
-echo Running QA pipeline...
-echo   Input:  !SELECTED_CSV!
-echo   Output: output\answers.csv
-echo.
-python qa.py --input "!SELECTED_CSV!" --output output/answers.csv --workers 4
-if errorlevel 1 (
-    echo [ERROR] QA pipeline failed.
-    pause
-    exit /b 1
-)
-
-:: 7. Open output
-echo.
-echo ====================================
-echo   Done! Opening output\answers.csv
-echo ====================================
-for /f "delims=" %%o in ('dir /b /o-d output\answers_*.csv 2^>nul') do (
-    start "" "output\%%o"
-    goto :done_open
-)
-start "" "output\answers.csv"
-:done_open
+streamlit run app.py --server.headless true
 pause
