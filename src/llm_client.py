@@ -40,12 +40,13 @@ class LLMClient(Protocol):
 class GroqClient:
     """Primary LLM. Free tier: 30 RPM, 14400 RPD. LPU inference is fast."""
 
-    def __init__(self, api_key: str, model: str = "llama-3.3-70b-versatile", timeout: float = 10.0):
+    def __init__(self, api_key: str, model: str = "llama-3.3-70b-versatile", timeout: float = 10.0, max_tokens: int = 1024):
         from groq import Groq
 
         self.client = Groq(api_key=api_key)
         self.model = model
         self.timeout = timeout
+        self.max_tokens = max_tokens
 
     def short_answer(self, question: str, context: str, max_chars: int = 50) -> str:
         resp = self.client.chat.completions.create(
@@ -57,7 +58,7 @@ class GroqClient:
             ],
             temperature=0,
             top_p=1,
-            max_tokens=256,
+            max_tokens=self.max_tokens,
             seed=42,
             timeout=self.timeout,
         )
@@ -87,12 +88,13 @@ class GeminiClient:
     # Free tier: 5 RPM for gemini-2.5-flash — keep under limit
     _limiter = _RateLimiter(rpm=4)
 
-    def __init__(self, api_key: str, model: str = "gemini-2.5-flash", timeout: float = 15.0):
+    def __init__(self, api_key: str, model: str = "gemini-2.5-flash", timeout: float = 15.0, max_tokens: int = 1024):
         from google import genai
 
         self.client = genai.Client(api_key=api_key)
         self.model_name = model
         self.timeout = timeout
+        self.max_tokens = max_tokens
 
     def short_answer(self, question: str, context: str, max_chars: int = 50) -> str:
         from google.genai import types
@@ -113,7 +115,7 @@ class GeminiClient:
                         temperature=0,
                         top_p=1,
                         top_k=1,
-                        max_output_tokens=256,
+                        max_output_tokens=self.max_tokens,
                     ),
                 )
                 return resp.text.strip()
