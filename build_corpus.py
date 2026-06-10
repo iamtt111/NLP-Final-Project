@@ -14,6 +14,27 @@ from src.bm25_store import write_jsonl, build_cache
 from src.settings import load_settings
 
 
+def chunk_image_description(text: str) -> list[str]:
+    """Split image description text into per-image chunks using [第 or [Page as boundaries."""
+    chunks = []
+    current: list[str] = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("[第") or stripped.startswith("[Page"):
+            if current:
+                chunk = "\n".join(current).strip()
+                if chunk:
+                    chunks.append(chunk)
+            current = [line]
+        else:
+            current.append(line)
+    if current:
+        chunk = "\n".join(current).strip()
+        if chunk:
+            chunks.append(chunk)
+    return chunks
+
+
 def main():
     parser = argparse.ArgumentParser(description="Build BM25 index from corpus")
     parser.add_argument("--corpus", default=None, help="Corpus folder path")
@@ -44,7 +65,10 @@ def main():
             print(f"  [{i}/{len(files)}] SKIP (empty): {file_path.name}")
             continue
 
-        chunks = chunk_text(text, size=chunk_size, overlap=chunk_overlap)
+        if "image_description" in file_path.parts:
+            chunks = chunk_image_description(text)
+        else:
+            chunks = chunk_text(text, size=chunk_size, overlap=chunk_overlap)
         for chunk in chunks:
             tokens = tokenize(chunk)
             rows.append({
