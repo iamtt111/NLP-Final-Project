@@ -1,0 +1,75 @@
+Image descriptions from: c4_ml_models_pt2.pdf
+
+[第7頁, 圖片1] 此頁以生活化比喻說明 LDA 的高層次運作原理。左側有一個卡通角色「我」（寶可夢訓練師小智的形象），下方標註「我是誰：品種 → 電動人 (topics)、興趣 → 漫畫、電動」，代表一個人（document）擁有多種主題標籤。中間有一個箭頭指向右側的台北101城市天際線照片，右下角有一個對話框寫著「人生地不熟，哪裡適合電動人去呢？」，用以類比 LDA 如何根據已知的主題分佈來推測文件與主題的關聯。
+
+[第8頁, 圖片1] 此頁展示 LDA 類比中「收集 Documents」的概念。左側標註「地區 (Documents)」，下方有兩張照片：上方是光華商場的店面街景照片，下方是信義區夜景的商場照片，代表不同的地區即為不同的文件。右側標註「朋友 (Words)」，顯示兩個哆啦A夢角色的卡通圖片——大雄和靜香，代表出現在文件中的詞彙。此圖用地區與朋友的關係來類比 LDA 中 document 與 word 的對應。
+
+[第9頁, 圖片1] 此頁說明 LDA 的「初始狀態（隨便猜）」階段。版面分為三欄：左欄「地區 (Documents)」顯示光華商場和信義區的照片；中欄「地區特性 / 朋友興趣 (Topics)」標示初始的隨機猜測標籤，其中「大雄是文青」和「靜香是網美」以箭頭連接左右兩欄；右欄「朋友 (Words)」顯示大雄和靜香的卡通圖片。此圖示範 LDA 演算法開始時對每個 word 隨機分配 topic 的過程。
+
+[第10頁, 圖片1] 此頁展示 LDA Iterative Update 的過程。左欄為光華商場照片（Documents），中欄為「地區特性 / 朋友興趣 (Topics)」，標示「大雄是文青」並以雙向箭頭連接，右欄為大雄的卡通圖（Words）。此步驟展示迭代更新如何逐步修正 word-topic 的分配關係。
+
+[第11頁, 圖片1] 此頁繼續展示 Iterative Update 過程。在原有架構基礎上，下方新增了「再仔細觀察其他人...」的提示，並出現三位被標註為「電動人」的人物照片（電競選手和動漫角色），說明模型在觀察更多資料後，發現光華商場中的人多為電動人，進而開始修正主題分配。
+
+[第12頁, 圖片1] 此頁展示 Iterative Update 的進一步迭代結果。中欄的 topic 標籤已從「大雄是文青」更新為「大雄是電動人」，反映模型根據觀察到光華商場中大量電動人的事實，重新分配了大雄的主題標籤。下方三位電動人角色照片仍然保留，展示迭代收斂的過程。
+
+[第13頁, 圖片1] 此頁展示 Iterative Update 收斂後的結果。左下方新增了說明框：「經過多次迭代後，發現光華商場裡出現許多電動人，因此定義出：光華商場 = 90% 電動人主題」。中欄標籤為「大雄是電動人」，說明模型已完成收斂，成功推斷出地區（document）的主題分佈。
+
+[第14頁, 圖片1] 此頁在 Iterative Update 的基礎上加入重要備註。左下方出現一個 Note 說明框：「同一個朋友 (word) 可以出現在不同主題，例如：Faker 出現在光華商場，他代表的是電動人；但如果 Faker 出現在信義區百貨公司代言手錶，他可能代表時尚/商業」。此概念對應 LDA 中同一個 word 可屬於不同 topic 的特性。
+
+[第15頁, 圖片1] 此頁展示 Iterative Update 最終確認的結果。中欄標籤框改為粗體顯示「大雄在光華商場的標籤為電動人」，表示經過完整迭代後，模型對於特定 word 在特定 document 中的 topic 分配已經穩定確定。
+
+[第16頁, 圖片1] 此頁展示 LDA 對新文件的推論能力。左下方說明框寫道：「如果我們在一個沒去過的地下街 (new document)，看到一堆 Faker 和研磨在走動，雖然我們不知道那是什麼地方，但根據 LDA 可以推測那邊的主題」。此圖說明 LDA 模型訓練完成後，可以對未見過的新文件進行主題分佈推斷。
+
+[第17頁, 圖片1] 此頁以圖解方式展示一個地區（信義區，以夜景商場照片呈現）的主題分佈結果。中央為信義區照片，四周以箭頭連接四個主題及其比例：「50%: 購物仔」配上購物女性照片、「30%: 電影仔」配上電影院觀眾照片、「15%: 網美」配上拍照女性照片、「5%: 電動人」配上動漫角色圖片。此圖直觀展示了 LDA 如何將一個 document 分解為多個 topic 的混合分佈。
+
+[第20頁, 圖片1] 此頁以深色背景呈現 Gibbs Sampling 的數學公式。標題為 Gibbs Sampling，公式為條件機率 P(z_i = k | w_i, d_i) 正比於 (n_dk + alpha) / (sum_k n_dk + K*alpha) 乘以 (n_kw + beta) / (sum_w n_kw + V*beta)。下方列出各變數定義：n_dk 為文件 d 中分配到主題 k 的詞數、n_kw 為詞 w 在主題 k 中出現的次數、alpha 為 document-topic distribution 的 Dirichlet prior、beta 為 topic-word distribution 的 Dirichlet prior、K 為主題總數、V 為詞彙表大小。
+
+[第21頁, 圖片1] 此頁與第20頁相同的 Gibbs Sampling 公式頁面，但新增了一個標註框「P(標籤 = 網美 | 其他人的狀態{})」，用生活化的方式解釋條件機率公式的含義，即在已知其他人的主題分配狀態下，計算某個人（word）被標記為某主題（如網美）的機率。
+
+[第22頁, 圖片1] 此頁繼續標註 Gibbs Sampling 公式，新增標註框指向公式左半部分，標示「該地區目前的網美比例 + alpha」，對應公式中的 (n_dk + alpha) 項，以生活化方式解釋此項代表該 document 中目前屬於該 topic 的比例加上 Dirichlet prior。
+
+[第23頁, 圖片1] 此頁繼續標註 Gibbs Sampling 公式，新增標註框指向公式右半部分，標示「全台北靜香被歸類為網美的次數 + beta」，對應公式中的 (n_kw + beta) 項，說明此項代表該 word 在所有 document 中被分配到該 topic 的全域統計加上 Dirichlet prior。
+
+[第24頁, 圖片1] 此頁展示 LDA API 的輸入格式。標題為「API Perspective: Inputs and Outputs」，顯示一個 bag of words count vectors 表格，列為 D1、D2、D3 三個文件，欄為 text、mining、is、to、find、useful、information、from、text、mined、dark、came 等詞彙，表格中填入 0 和 1 的詞頻計數值，展示文件-詞彙矩陣的稀疏結構。
+
+[第25頁, 圖片1] 此頁展示 LDA 的輸出矩陣之一：topics x words 矩陣。顯示一個空的表格，列為 topic1 到 topic5，欄為 word1 到 word8，用以說明 LDA 輸出的兩個矩陣中的 topic-word 分佈矩陣結構。
+
+[第26頁, 圖片1] 此頁展示 topics x words 矩陣的實際範例，以三組水平長條圖呈現。Topic 1 的高頻詞包含 software、microsoft、virus、security、anti 等（軟體安全主題）；Topic 2 包含 people、government、us、uk、home、rights、law 等（政治法律主題）；Topic 3 包含 search、people、mail、site、spam、users、google 等（網路搜尋主題）。底部標註「Example of topics x words (barchart of top words per topic)」，藍色長條的長度代表每個詞在該主題中的權重。
+
+[第27頁, 圖片1] 此頁展示 LDA 輸出的另一個矩陣：document x topics。以一個長條圖顯示某個文件的主題分佈，X 軸為 Topic 1 到 Topic 5，Y 軸為該主題的權重。圖中 Topic 1 的長條最高，Topic 3 次之，其餘 topic 的值接近零，展示一個文件主要由兩個主題組成的分佈情況。
+
+[第28頁, 圖片1] 此頁在第27頁的 document x topics 長條圖基礎上，新增了綠色對話框標註：「Topic 1 was related to: Microsoft, viruses, security, ...」、「Topic 3 was related to: Google, search, spam, ...」以及「What if our document is about viruses acquired through spam?」。此標註展示如何解讀 document-topic 分佈，並說明一個文件可以同時涵蓋多個相關主題。
+
+[第33頁, 圖片1] 此頁展示推薦系統中的 Rating Matrix。右側顯示一個使用者-電影評分矩陣，列為四位使用者（以頭像圖示表示），欄為七部電影（以電影海報縮圖表示，包括 La La Land、Toy Story、Bride 等），矩陣中填入 5 到 10 的評分數值，部分格子為空（missing values）。左側列出要點說明這是一個 M x N 的 sparse matrix，與 TF-IDF 的稀疏性不同（zero vs. missing），目標是填補缺失值以進行推薦。
+
+[第34頁, 圖片1] 此頁以圖解方式展示 Matrix Factorization 的核心概念。上方顯示公式 R 約等於 WH，下方以三個彩色矩形方塊圖示分解過程：左側紫色大方塊標示 R (M x N)，中間淺藍色瘦長方塊標示 W (M x K)，右側粉紅色扁平方塊標示 H (K x N)。右下角有說明框：「When we multiply W and H together, the result is an MxN matrix, with no missing values!」，強調矩陣分解可以填補原始矩陣的缺失值。
+
+[第35頁, 圖片1] 此頁展示如何找到 W 和 H 矩陣。右下方有一個 NMF 矩陣分解的熱力圖視覺化範例，標示 R = WH，其中 R 矩陣（m x n，samples x genes）以綠色深淺表示數值大小，分解為 W 矩陣（m x k）以紫色深淺表示，和 H 矩陣（k x n）以藍色深淺表示。標註包含 metagenes 和 metaassays/metasamples，展示矩陣分解在基因表達數據中的應用範例。
+
+[第36頁, 圖片1] 此頁展示 NMF 的輸出結構。以三個彩色矩形方塊圖示：左側紫色大方塊標示「Documents x Words」，中間淺藍色方塊標示「W (M x K)」並在底部標註「Topics」及左側標註「Documents」，右側粉紅色方塊標示「H (K x N)」並在右側標註「Topics」及底部標註「Words」。右下角有綠色對話框標註「The same outputs as LDA!」，強調 NMF 產出的兩個矩陣與 LDA 的 document-topic 和 topic-word 分佈具有相同的結構意義。
+
+[第40頁, 圖片1] 此頁展示降維的概念與 TF-IDF 表格範例。上方說明 NLP 資料通常是高維度的。下方顯示一個 TF-IDF 表格，列為 Doc 1、Doc 2、Doc 3，欄為 I、love、dogs、hate、and、knitting、is、my、hobby、passion 等詞彙，數值為 TF-IDF 權重（如 0.18、0.48、0.95 等），其中粗體標示的高權重值突出了各文件的關鍵詞，展示高維度稀疏矩陣的特性。
+
+[第41頁, 圖片1] 此頁以散佈圖展示降維的直觀範例。右側顯示一個二維散佈圖，X 軸為 Human Weight、Y 軸為 Human Height，藍色圓點沿著一條紅色斜線分佈（由左下到右上），呈現正相關趨勢。左下角標註「Small Size」、右上角標註「Big Size」，說明可以將二維的身高體重資料投影到一條線上，用單一變數「size」來描述，從而將維度從二維降為一維。兩端用紅色方框標示極端值。
+
+[第42頁, 圖片1] 此頁展示維度的概念——一個 2D 物件嵌入到 3D 空間。右側顯示一個 3D 曲面圖（surface plot），以紅色到黃色的漸變色呈現一個波浪狀曲面，座標軸為 x/L(x) 和 y/L(y)，z 軸範圍從 -1.4 到 1.0。左下方有綠色標註框說明「A 2-D object embedded in 3-D space」，用以說明降維的動機：資料本質上可能是低維的，但被嵌入在高維空間中。
+
+[第43頁, 圖片1] 此頁展示將 2D 笑臉嵌入 3D 空間的數學過程。左側顯示一個 2D 散佈圖，以藍色點構成一個笑臉圖案（A_1x2 = [x,y]），中間有一個彎曲箭頭指向右側的 3D 座標系（X、Y、Z 軸）中的紫色立方體。中間標示公式 A_1x2 x M_2x3 + Noise = A'_1x3，其中 M 代表旋轉、縮放和傾斜，Noise 代表對每個點加入微小隨機擾動，產生 3D 的厚度（雜訊）。
+
+[第44頁, 圖片1] 此頁展示嵌入 3D 空間後的笑臉資料從不同角度觀察的效果。包含三個 3D 散佈圖：左上方從一個角度看到笑臉的立體結構，藍色點構成笑臉形狀並帶有明顯的厚度；右上方從正面俯視角度可以清楚看到笑臉圖案；右下方從側面角度看則只能看到一個扁平的橢圓形狀。每個圖中都有一個黃色圓點標記參考位置。中間說明框標註「Thickness is the noise we add」，展示雜訊造成的第三維度厚度。
+
+[第45頁, 圖片1] 此頁展示對 3D 笑臉資料套用 SVD 後的結果。右上方顯示一個 2D 散佈圖，成功還原出笑臉圖案（雖然方向可能與原始不同）。左側標示公式 A = U*Sigma*V^T，並以中文解釋：V^T 用於找出資料的最佳觀測視角（旋轉空間）、Sigma 決定每個視角的重要性（大的值是特徵，小的值是雜訊），丟棄 Sigma 中的微小數值後重新計算出的 A_clean 就是無雜訊的笑臉。右下角標註「SVD found the right orientation, and threw away the 3rd noise dimension」。
+
+[第46頁, 圖片1] 此頁以示意圖展示 SVD 的 Noise Removal 原理。左側有三個直立的紫色長條，每個都標註「Data + Noise」，旁邊綠色對話框說明「Original data: each dimension is a bit of data + noise」。中間有一個大黑色箭頭指向右側，右側有三個長條分別以藍色標註「Data」、「Data」和粉紅色標註「Noise」，旁邊綠色對話框說明「Rotated data: axes are aligned so that each dimension is pure data or pure noise」。此圖直觀展示 SVD 如何通過旋轉座標軸將混合的資料與雜訊分離。
+
+[第47頁, 圖片1] 此頁展示 LSA 的功能示意圖。左側灰色方塊標示「X matrix (TF-IDF or counts)」，中間有一個黑色箭頭標註「LSA/SVD」，右側分為兩部分：左半淺灰色區域標註「Z matrix」（去噪後的資料），右半粉紅色區域標註「Noise columns (these are not kept)」。上方標註框說明「The denoised data is put into a documents x topics matrix」，展示 LSA 如何將原始文件-詞彙矩陣轉換為降維後的 documents x topics 矩陣並去除雜訊。
+
+[第48頁, 圖片1] 此頁在第47頁的 LSA 示意圖基礎上，新增下方標註框：「The columns are ordered by importance (left most is most important)」，說明經 LSA/SVD 轉換後的 Z matrix 中，欄位按重要性排序，最左邊的欄位最重要，最右邊的為雜訊欄位會被丟棄。
+
+[第49頁, 圖片1] 此頁在第48頁的基礎上再新增一個標註框：「This means when you plot the data with 2-dimensions, you're choosing the best 2 dimensions to show」，進一步解釋 LSA 降維至二維視覺化時，選擇的是最重要的兩個維度來呈現資料，從而實現最佳的低維表示。
+
+[第53頁, 圖片1] 此頁展示 Coherence Score 曲線圖用於選擇最佳主題數量。右上方顯示一條折線圖，X 軸為 Number of Topics (k) 從 2 到 20，Y 軸為 Coherence Score 從 0.30 到 0.70。曲線在 k=8 時達到最高點（約 0.65），標註為「Optimal Topic Number (k=8)」，之後曲線下降並波動。左下方標註「Underfitting (Too few topics)」，右側標註「Overfitting (Too many topics)」。下方說明 Coherence Score 衡量主題內頂部詞彙的語義相關性，使用 word co-occurrence 或 semantic similarity 計算，數值越高越好。
+
+[第54頁, 圖片1] 此頁展示 Perplexity Score 曲線圖用於選擇最佳主題數量。右上方顯示一條下降曲線圖，X 軸為 Number of Topics (k) 從 2 到 20，Y 軸為 Perplexity Score (Lower is Better) 從 700 到 2000。曲線呈現典型的 elbow shape，在 k=2 時最高（約 1900，標註「High Perplexity, Poor Prediction」），在 k=8 處標註「Elbow Point (k=8)」（約 800），之後下降趨緩，右側標註「Diminishing Returns, Slower Decrease (k=20)」。下方說明 Perplexity 衡量模型預測未見文件的能力，越低代表越好的泛化能力。
+
+[第55頁, 圖片1] 此頁以深色背景展示 Perplexity Score 的計算公式。標題為「Calculating Perplexity Score (skip)」，公式為 Perplexity(D) = exp(-(sum_{d in D} log P(w_d)) / (sum_{d in D} N_d))，其中 P(w_d) 為模型對文件 d 所有詞語的聯合機率，N_d 為文件 d 中的總詞數，結果越低表示模型能更好地解釋這些資料。

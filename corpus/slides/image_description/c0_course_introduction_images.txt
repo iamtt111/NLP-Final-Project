@@ -1,0 +1,31 @@
+Image descriptions from: c0_course_introduction.pdf
+
+[第7頁, 圖片1] 機器學習（Machine Learning）子領域分類圖。外層大框為「Machine Learning」，內部分為三個色塊：黃色區塊為「Natural Language Processing (Text and Speech)」（自然語言處理，處理文字與語音）；綠色區塊為「Computer Vision (Image, Video, ...)」（電腦視覺，處理圖片與影片）；紫色區塊為「Other」（其他），包含 Tabular Data（表格資料）、Time Series（時間序列）、RL（強化學習）、Game Theory（賽局理論）。此圖說明 NLP 是機器學習的一個子領域。
+
+[第8頁, 圖片1] 電子郵件收件匣截圖，顯示「Spam」資料夾中有 372 封垃圾郵件，旁邊有一個滑鼠游標圖示。此圖為垃圾郵件偵測（Spam Detection）的 NLP 應用範例。
+
+[第8頁, 圖片2] iPhone 手機收到詐騙簡訊的截圖。簡訊內容為「Win a free iPad from Apple! Go to the following link to enter: iPad.apples.com/youreanidiot」，附有可疑連結。此圖說明釣魚簡訊偵測（Phishing Detection）作為 NLP 的應用。
+
+[第9頁, 圖片1] 手機鍵盤 SwiftKey 的截圖。使用者正在輸入「I just wanted to」，鍵盤上方顯示三個預測文字建議：「let」、「say」（高亮顯示）、「check」。此圖展示自動完成/預測文字（Predictive Text）作為 NLP 的應用。
+
+[第9頁, 圖片2] Gmail 撰寫郵件視窗的截圖。收件人為「Jacqueline Bruzek」，主旨為「Taco Tuesday」，郵件內容為「Hey Jacqueline, Haven't seen you in a while and I ho」，Gmail 的 Smart Compose 功能自動建議補全為「pe you're doing well.」（灰色字體）。此圖展示智慧撰寫（Smart Compose）作為 NLP 的應用。
+
+[第10頁, 圖片1] 四種語音助理裝置並排展示：Amazon Echo（Alexa）、Samsung Bixby（手機畫面）、Google Home（白色圓柱型喇叭）、Apple Siri（iPhone 畫面顯示「Go ahead, I'm listening...」）。此圖說明語音助理/對話式 AI 作為 NLP 的應用。
+
+[第11頁, 圖片1] 股票市場交易圖表，顯示價格隨時間的走勢，有綠色上升趨勢線和紅色下降趨勢線，背景為數字行情看板。此圖說明金融情緒分析（Financial Sentiment Analysis）或市場預測作為 NLP 的應用。
+
+[第11頁, 圖片2] 情緒分析（Sentiment Analysis）示意圖，分為三個類別：POSITIVE（正面）— 藍色笑臉，範例文字「Great service for an affordable price. We will definitely be booking again.」；NEUTRAL（中性）— 黃色平臉，範例文字「Just booked two nights at this hotel.」；NEGATIVE（負面）— 紅色哭臉，範例文字「Horrible services. The room was dirty and unpleasant. Not worth the money.」
+
+[第12頁, 圖片1] Google 翻譯相機功能的截圖。手機鏡頭對準一個「STOP」停止標誌，畫面上方顯示「English → Tamil」，標誌上的英文「STOP」被即時翻譯為泰米爾文「நிறுத்த」。此圖展示機器翻譯（Machine Translation）作為 NLP 的應用。
+
+[第13頁, 圖片1] GitHub Copilot 的產品頁面截圖，標語為「Your AI pair programmer」，標記「Technical preview」。右側程式碼編輯器顯示一個 JavaScript 檔案「fetch_pic.js」，其中有一個 fetchNASAPictureOfTheDay 函式，透過 fetch 呼叫 NASA 的 API。此圖展示 AI 輔助程式碼生成作為 NLP 的應用。
+
+[第13頁, 圖片2] ChatGPT 對話截圖。使用者提問「What is ChatGPT?」，ChatGPT 回答：「ChatGPT is an AI-powered chatbot developed by OpenAI. It is based on the GPT (Generative Pre-trained Transformer) architecture, specifically GPT-3.5. ChatGPT is designed to engage in text-based conversations with users, providing responses that are coherent, contextually relevant, and generated in a human-like manner.」此圖展示聊天機器人/對話式 AI 作為 NLP 的應用。
+
+[第14頁, 圖片1] NLP 流程圖（NLP Process Flowchart），為階層式樹狀圖。頂層為「NLP」，分為兩大分支：左側為「NLU」（Natural Language Understanding，自然語言理解），下方再分為「Sentiment Analysis」（情緒分析）和「Entity Recognition」（實體辨識）；右側為「NLG」（Natural Language Generation，自然語言生成），下方再分為「AI Writing Tools」（AI 寫作工具）和「Text Summarization」（文字摘要）。
+
+[第16頁, 圖片1] 三種 NLP 表示方法的示意圖並排展示。左圖：二維向量空間圖，展示詞嵌入（Word Embedding）的語意關係，包含 man/woman、king/queen、cat/cats、dog/dogs 等類比關係，以及 France-Paris、England-London、Italy-Rome 等國家-首都對應關係。中圖：比較級/最高級詞彙關係，以箭頭表示 slow→slower→slowest、fast→faster→fastest、long→longer→longest，以及性別對應 father/mother→son/daughter、boy/girl、he/she、himself/herself。右圖：以 Bob_Dylan 為中心的知識圖譜（Knowledge Graph），透過標記邊（comprise、explore、write、adopt、record、draw 等）連接至 The_Freewheelin'_Bob_Dylan、Folk_music、Country_music、Duluth,_Minnesota 等實體節點。
+
+[第17頁, 圖片1] 下一個詞預測（Word Prediction）範例圖。句子「the students opened their ______」留有空白待填入，四個候選詞以藍色橢圓泡泡顯示，並標註各自的機率：books（0.2）、laptops（0.1）、exams（無標註）、minds（0.1），其中 minds 下方另有一個紅色方框標註 0.6。此圖說明語言模型/下一個詞預測的概念。
+
+[第18頁, 圖片1] 機器學習模型應用總覽表格，分為四個色塊區域。左上橘色區塊：Spam Detection（垃圾郵件偵測），用途為 email filtering、SMS spam detection、phishing detection，方法為 Naive Bayes、SVM、Random Forest。右上綠色區塊：Sentiment Analysis（情緒分析），用途為 reputation management、stock market、customer feedback，方法為 Logistic Regression、SVM、BERT、Random Forest。左下黃色區塊：Latent Semantic Indexing（潛在語意索引），用途為 information retrieval、document clustering、search engines，方法為 PCA / SVD。右下藍色區塊：Topic Modeling（主題建模），用途為 legal document classification、news categorization、recommendation systems，方法為 Latent Dirichlet Allocation。

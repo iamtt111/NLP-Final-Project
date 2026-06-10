@@ -1,0 +1,25 @@
+Image descriptions from: c4_ml_models_pt1.pdf
+
+[第2頁, 圖片1] NLP 模型分類概覽圖。中央為一個思考中的人物圖示，標題為「Which model type should be used for text analysis?」，三個思考泡泡分別指向三種模型類型：左側藍色「Vector-based models」（向量模型，將文字轉換為數值表示）、右側綠色「Probabilistic models」（機率模型，使用統計機率預測結果）、下方橘色「ML-based models」（機器學習模型，從資料中學習模式進行分類與聚類）。
+
+[第6頁, 圖片1] NLP 應用分類表格，分為 Supervised（監督式）和 Unsupervised（非監督式）兩欄。監督式包含：Spam detection（垃圾郵件偵測）、Sentiment analysis（情緒分析）；非監督式包含：Topic modeling（主題建模）、Latent semantic analysis（潛在語意分析）、Text summarization（文字摘要）。
+
+[第13頁, 圖片1] Sentiment Analysis（情緒分析）示意圖。左側粉色對話泡泡顯示負面評論「I can't believe I wasted 2 hours of my life on that film.」，右側綠色對話泡泡顯示正面評論「Wow, that was a really great film.」。下方有三個表情圖示：紅色哭臉代表 Negative（負面）、黃色平臉代表 Neutral（中性）、綠色笑臉代表 Positive（正面）。
+
+[第14頁, 圖片1] Classification or Regression（分類或迴歸）說明圖。右側為五行星級評分圖示，從5星到1星遞減排列，每行的星星以金色（亮）和深色（暗）表示。下方有五個表情圖示，從左到右依序為：紅色怒臉、橘色哭臉、黃色平臉、淺綠色微笑臉、深綠色開心臉，對應1到5星的情緒等級。此圖說明情緒分析可視為分類任務（離散類別）或迴歸任務（連續分數）。
+
+[第21頁, 圖片1] Text Summarization（文字摘要）概念圖。左側為一份較長的「Document」文件圖示（多行藍色和灰色橫線代表文字內容），箭頭指向右側較短的「Summary」摘要圖示（較少行的藍色橫線），展示文字摘要將長文件壓縮為簡短摘要的過程。
+
+[第23頁, 圖片1] 兩種摘要類型對比圖。右上角有兩個手繪剪貼簿圖示，左側標記「Extractive」（抽取式，文件中部分句子以螢光標記），右側標記「Abstractive」（生成式，以手寫風格文字表示重新撰寫的內容）。Extractive Summarization 從原文中直接選取關鍵句子，工具包括 TextRank、LexRank、Sumy、RAKE；Abstractive Summarization 使用新的詞彙生成摘要，工具包括 BERTSUM、Pegasus、T5、GPT-based models。
+
+[第25頁, 圖片1] Sentence Splitting & TF-IDF 範例表格。表格為 sentences x terms 的 TF-IDF 矩陣，列為 Sentence1、Sentence2、Sentence3，欄為 incubation、mean、of、period、risk、the、transmission 等詞。表格中的值以 high、medium、o（零）表示各句子中各詞的 TF-IDF 權重。
+
+[第29頁, 圖片1] PageRank 概念說明。下方顯示 Google PageRank 的標誌，包含彩色的「Google」文字商標和「PageRank」字樣，以及一個綠色進度條。
+
+[第30頁, 圖片1] PageRank 網頁圖（The Secret to PageRank）。圖為一個有向圖，節點為不同大小和顏色的圓球，代表網頁。最大的紅色節點 B 佔 38.4%，次大的橘色節點 C 佔 34.3%，黃色節點 E 佔 8.1%，綠色節點 D 和 F 各佔 3.9%，藍色節點 A 佔 3.3%，四個紫色小節點各佔 1.6%。節點之間有箭頭表示超連結關係，節點大小與其 PageRank 分數成正比，說明 random walk（隨機漫步）收斂後各頁面的機率分佈。
+
+[第33頁, 圖片1] Symmetric TextRank 公式。黑底白字的公式框顯示：S(V_i) = (1-d) + d × Σ (w_ij / Σw_jk) × S(V_j)。其中 S(V_i) 為句子 i 的重要性分數，d 為阻尼係數（通常 0.85），w_ij 為句子 i 與 j 的相似度權重，分母為句子 j 所有鄰居連線的權重總和。
+
+[第36頁, 圖片1] Symmetric TextRank 迭代計算範例。右上角灰色框列出三個句子（斷詞版）：S1「機器 學習 很 有趣」、S2「機器 學習 很 困難」、S3「深度 學習 解決 困難」，以及句子間的相似度權重（w12=w21=3, w13=w31=1, w23=w32=2）和各句子的總權重（W1=4, W2=5, W3=3）。左側展示 Step 3 迭代更新 S1 的計算過程：S(S1) = (1-0.85) + 0.85 × (3/5 × 1 + 1/3 × 1) = 0.943。下方為公式的中文說明版本：彼此的權重 / 對方的總權重 × 對方的分數。
+
+[第39頁, 圖片1] Symmetric TextRank 迭代結果。顯示第一輪迭代結束後的分數變化：S1: 1→0.94、S2: 1→1.35（粗體，分數最高）、S3: 1→0.7，並標註「Repeat Step3 直到收斂」。S2 分數最高，表示「機器 學習 很 困難」是最重要的句子。

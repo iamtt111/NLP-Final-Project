@@ -1,0 +1,105 @@
+Image descriptions from: c1_vector-based_models.pdf
+
+[第5頁, 圖片1] C++ 程式碼片段，展示字元（character）資料型態的使用。程式碼包含 #include<iostream>，宣告 char name[200][20] 陣列，使用 cin 讀取輸入並以 cout 輸出，共 12 行程式碼，用以說明在 C++ 等程式語言中「字元」是基本資料型態。
+
+[第6頁, 圖片1] 文字雲（Word Cloud）圖片，用於說明詞彙表（Vocabulary）的概念。圖中以不同大小與顏色呈現多個英文單字，較大的字詞如 "vocabulary"、"words"、"English"、"magazine"、"cards" 等表示出現頻率較高，整體形狀為橢圓形雲狀排列。
+
+[第7頁, 圖片1] 文本層級結構示意圖，由左至右依序為：Token（詞元，以短線表示）、Sentence（句子，以較長線表示）、Paragraph（段落，以三條橫線表示）、Document（文件，以帶有摺角的文件圖示表示）、Corpus（語料庫，以多份文件堆疊圖示表示）。每個層級的圖示由小到大，視覺化呈現文本從最小單位到最大集合的階層關係。
+
+[第8頁, 圖片1] N-gram 範例表格，包含兩欄：Text（文本）與 N-gram（N 元語法）。表格列出四個範例：「Data」為 1-gram（一元語法）、「Great information」為 2-gram（二元語法）、「I am fine」為 3-gram（三元語法）、「Nice to meet you」為 4-gram（四元語法）。表頭為綠色背景。
+
+[第9頁, 圖片1] 二維座標系統圖，X 軸與 Y 軸範圍皆為 -6 到 6，帶有格線。圖中有一個紅色箭頭向量從原點 (0,0) 指向座標 (3,4)，用以說明向量（Vector）的概念，即一個純量陣列，可視覺化為空間中帶有方向的箭頭。
+
+[第12頁, 圖片1] 垃圾郵件偵測散佈圖（Spam Detection with Vectors）。圖中顯示二維平面上的兩個群集：左上方為紅色點群，右下方為藍色點群，中間有一條對角線作為決策邊界（Decision Boundary），將兩類資料分開。X 軸範圍約 -4 到 4，Y 軸範圍約 -4 到 4。用以說明將文本轉換為向量後，可透過在兩群之間畫線來進行分類。
+
+[第13頁, 圖片1] 與第 12 頁相同的垃圾郵件偵測散佈圖，但新增了一個灰藍色的未知資料點（位於右下方約 (1, -3.5) 處），並附有文字說明框：「假設有一封新郵件，其垃圾郵件狀態未知，問題變成：它在線的哪一邊？」用以說明分類預測的直覺概念。
+
+[第14頁, 圖片1] 文件分群（Clustering）散佈圖，顯示五個以不同顏色區分的群集：Cluster 0（紅色，左中位置）、Cluster 1（青色，右下位置）、Cluster 2（紫色，右上位置）、Cluster 3（黃色，中間位置）、Cluster 4（黑色，中下位置）。每個群集包含大量密集的資料點，圖例標示於左下方。用以說明將文件轉為向量後可自動進行聚類分組。
+
+[第15頁, 圖片1] 散佈圖展示紅色與藍色資料點在二維空間中完全混合、無法分離的情況。X 軸與 Y 軸範圍皆為 0.0 到 1.0，資料點均勻散布於整個區域。左側附有說明框：「這是我們不想要的情況。我們的目標是將文本智慧地（intelligently）轉換為向量。」用以說明若向量化方法不佳，資料將無法區分。
+
+[第16頁, 圖片1] 一個棕色紙袋的圖片，袋子上印有 "WORDS" 字樣，用以視覺化說明 Bag of Words（詞袋模型）的概念——將文本中的詞語視為裝在袋子裡的無序集合。
+
+[第17頁, 圖片1] "Order Matters: Example" 主題下的對比圖片。左側標示 "Dog Toy"（狗玩具），顯示一隻金毛犬與一個藍色環形狗咬膠玩具；右側標示 "Toy Dog"（玩具狗），顯示一隻米格魯外型的絨毛玩偶。兩組圖片使用相同的單字（Dog 和 Toy），但因順序不同而表達完全不同的意思，說明詞序的重要性。
+
+[第18頁, 圖片1] 手繪風格插圖，展示 Document（文件）轉換為 Bag of Words（詞袋）的過程。左側為一張紙，上面有手寫文字 "LDA is a great tool for summarizing text!"，標記為 "Document"、"Ordered Text"（有序文本）。右側為一個袋子形狀，裡面的文字被打亂排列（"for"、"great"、"LDA"、"tool" 等），標記為 "Bag of Words"、"Unordered Text"（無序文本）。中間有一個黑色箭頭表示轉換方向。
+
+[第20頁, 圖片1] 資料格式表格，展示文本分類任務的資料結構。表格包含兩欄：Text Inputs（文本輸入）與 Labels/Targets（標籤/目標）。五筆範例資料分別為：「Ad sales boost Time Warner profit...」標記為 business、「Dollar gains on Greenspan speech...」標記為 politics、「Yukos unit buyer faces loan claim...」標記為 entertainment、「High fuel prices hit BA's profits...」標記為 finance、「Pernod takeover talk lifts Domecq...」標記為 business。
+
+[第21頁, 圖片1] 與第 20 頁相同的資料格式表格，但新增了兩個視覺標註：表格的 Text Inputs 欄位被紅色框線框住，右上方有灰色說明框寫著「我們的首要目標是將輸入轉換為數值（向量）以供機器學習模型使用」，強調文本向量化的目標。
+
+[第22頁, 圖片1] 詞彙大小決定向量維度的說明圖。下方為一個示範向量表格，上方一列為數值（0, 0, 25, ..., 0, 3），下方一列為對應的詞彙（"a", "aa", "and", ..., "zoo", "zygote"）。附有兩個標註框：一個指向 25 說明「這表示 'and' 在此文件中出現 25 次」，另一個指向整列數值說明「這是一個範例向量」。
+
+[第23頁, 圖片1] Count Vectorizer（計數向量化）的簡單範例。左側為原始文件表格，包含三個句子：「I like eggs」、「I hate cats」、「I like eggs and I like cats」。中間有黑色箭頭指向右側的計數矩陣，欄位為六個詞彙（and, cats, eggs, hate, I, like），每列為對應文件的詞頻計數。例如第三個句子中 "I" 出現 2 次、"like" 出現 2 次。上方標註 V（vocabulary size）= 6，並有說明框「每一列都是一個大小為 6 的向量」。
+
+[第24頁, 圖片1] 計數如何幫助分類的散佈圖。X 軸為 "Gravity"（重力一詞的出現次數），Y 軸為 "Mitochondria"（粒線體一詞的出現次數）。圖中左上方為紅棕色的生物學（Biology）文件群集，右下方為藍色的物理學（Physics）文件群集，兩者之間有一條黑色對角線作為決策邊界。一個灰藍色的新資料點出現在生物學群集附近。右上方說明框寫著：「給定新文件，計算 Mitochondria 和 Gravity 的出現次數，畫在此圖上，判斷向量落在線的哪一邊。」
+
+[第25頁, 圖片1] Scikit-Learn 中 CountVectorizer 的 Python 程式碼範例。程式碼展示了建立向量化器（vectorizer = CountVectorizer()）、擬合（fit）、轉換（transform）以及一步完成的 fit_transform 用法，最後示範對測試資料進行 transform。
+
+[第26頁, 圖片1] 正規化（Normalization）公式展示。包含兩種方法：方法一為 L2-norm 正規化，公式為 x_hat = x / ||x||_2，其中 ||x||_2 = sqrt(sum of x_i^2)；方法二為除以總和正規化，公式為 x_hat = x / sum(x_i)，可將每個元素視為機率。公式以大型數學排版呈現。
+
+[第27頁, 圖片1] 正規化前後的向量比較圖。左側標題「Before Normalization (Length Varies)」，在二維座標系（Word 1 Count vs Word 2 Count）中顯示兩個向量：Doc A Vector (Short Text) 為藍色箭頭指向 (3,4)，L2-norm = 5；Doc B Vector (Long Text) 為紅色箭頭指向 (10,20)，L2-norm = 22.36。中間標示「Normalization Process: Divide by its own L2-norm length」。右側標題「After Normalization (Make L2-norm 1)」，顯示一個單位圓，兩個正規化後的向量分別指向 (0.6, 0.8) 和 (0.45, 0.89)，L2-norm 皆為 1。下方說明「所有文件向量現在具有統一長度 1，可進行公平比較（如 Cosine Similarity），不受原始文件長度影響。」
+
+[第28頁, 圖片1] Tokenization（分詞）方法比較表格。三欄分別為 Method（方法）與 Output（輸出）。三種方法：s.split() 輸出 ["I", "like", "cats."]；NLTK word_tokenize() 輸出 ["I", "like", "cats", "."]；SpaCy Tokenizer 輸出 ["I", "like", "cats", "."]。展示不同分詞工具對標點符號的處理差異。
+
+[第38頁, 圖片1] 停用詞（Stopwords）概念的紅色八角形 STOP 標誌圖片，上面印有白色的 "STOP" 字樣。用以視覺化引入停用詞的概念——在建立向量時應停止（忽略）某些高頻但無意義的詞。
+
+[第39頁, 圖片1] 停用詞文字雲（Word Cloud），黑色背景上以不同大小和顏色（主要為白色、藍色、橘色）顯示常見英文停用詞。最大的字為 "the"，其他顯著的詞包括 "and"、"to"、"of"、"for"、"at"、"do"、"about"、"as" 等。用以說明這些高頻詞出現在幾乎所有文本中，但對區分文件主題沒有幫助。
+
+[第40頁, 圖片1] 高維度資料視覺化圖片，展示一個球狀的資料分布圖，其中包含多種顏色的群集（藍色、橘色、綠色、灰色、粉色等），資料點以數字和色塊呈現。用以說明高維度問題（Dimensionality）——維度越多，計算量越大，可能需要移除停用詞以降低維度。
+
+[第41頁, 圖片1] 向量距離與聚類的示意圖，位於頁面右下角。圖中顯示四個明顯的群集（藍色、黃色、紅色、綠色），每個群集中心有圓形標記，群集之間以折線相連，代表不同聚類中心的距離關係。用以說明停用詞的計數會導致向量間的距離由這些無意義詞的頻率主導，而非真正重要的詞彙（如 "mitochondria" 或 "voltage"）。
+
+[第42頁, 圖片1] NLTK 停用詞的 Python 程式碼範例，並附有一個灰色說明框（位於右下方），框內以中文寫著：「中文需使用 jieba 或 CKIP 進行 tokenization，並使用自定義的停用詞表」。說明中文的分詞與停用詞處理需要不同的工具。
+
+[第48頁, 圖片1] 詞性（Parts of Speech）的彩色蠟筆堆疊圖。右側顯示九支彩色蠟筆，由上至下依序為：Nouns（名詞，紅色）、Pronouns（代名詞，橘色）、Verbs（動詞，黃色）、Adjectives（形容詞，綠色）、Articles（冠詞，藍色）、Adverbs（副詞，紫色）、Prepositions（介係詞，粉色）、Conjunctions（連接詞，青色）、Interjections（感嘆詞，深紅色）。每支蠟筆旁附有該詞性的簡要英文定義。左側展示 "following" 一詞在不同句子中作為名詞（Noun）和動詞（Verb）的用法差異。
+
+[第50頁, 圖片1] 向量相似度（Vector Similarity）的流程圖。左側為兩個輸入向量 a = [0.5, 0.3, ...] 和 b = [-0.1, 0.2, ...]，透過箭頭進入中間的「Similarity Function s(a, b)」方塊，最後輸出 score = 0.12345。用以說明相似度函數接受兩個向量作為輸入，並產生一個數值分數。
+
+[第51頁, 圖片1] 歐氏距離（Euclidean Distance）說明圖。右上方為二維座標圖，顯示兩個向量 v1（紅色箭頭，指向 (3,1)）和 v2（藍色箭頭，指向 (1,2)），兩者之間以灰色虛線連接，標註距離為 sqrt(5) = sqrt((1-3)^2 + (2-1)^2)。下方為歐氏距離的一般公式：||x - y||_2 = sqrt((x_1 - y_1)^2 + (x_2 - y_2)^2 + ... + (x_D - y_D)^2)。
+
+[第52頁, 圖片1] 餘弦相似度（Cosine Similarity）說明圖——夾角接近 0 度的情況。左側顯示兩個方向幾乎相同的箭頭向量，附有綠色標註框「Angle ≈ 0」。右側為 cos(theta) 的函數圖，X 軸為角度 theta（0 到 360 度），Y 軸為 cos(theta) 值（-1 到 1）。圖上以紅色虛線標示 60 度對應 cos 值為 0.5。說明當兩向量方向相近時，夾角接近 0，餘弦值接近 1，表示高相似度。
+
+[第53頁, 圖片1] 餘弦相似度說明圖——夾角接近 180 度的情況。左側顯示兩個方向幾乎相反的箭頭向量，附有綠色標註框「Angle ≈ 180°」。右側為相同的 cos(theta) 函數圖。說明當兩向量方向相反時，夾角接近 180 度，餘弦值接近 -1，表示最大不相似度。
+
+[第54頁, 圖片1] 餘弦距離（Cosine Distance）說明圖。上方以大型斜體字呈現公式「Cosine Distance = 1 - Cosine Similarity」。下方左側為兩個方向相同的向量（夾角 ≈ 0），附有綠色標註框計算：dist = 1 - sim = 1 - 1 = 0。右側為兩個方向相反的向量（夾角 ≈ 180°），附有綠色標註框計算：dist = 1 - (-1) = 2。
+
+[第55頁, 圖片1] 二維座標圖，X 軸標示為 "Voltage"（電壓），Y 軸標示為 "Mitochondria"（粒線體）。此為空白座標系，尚未放入資料點，作為後續比較歐氏距離與餘弦相似度的起始框架。
+
+[第56頁, 圖片1] 承接第 55 頁的座標圖，新增三個資料點：Y 軸上方有一個紅色大圓點（代表「很長的書，Mitochondria 出現 500 次」），Y 軸下方有一個紅色小圓點（代表「短書，Mitochondria 出現少數幾次」），X 軸右方有一個綠色圓點（代表「短書，Voltage 出現少數幾次」）。各點旁有標註框說明。
+
+[第57頁, 圖片1] 承接第 56 頁的座標圖，新增粉紅色連線標示兩個紅色點（同為生物學書籍）之間的歐氏距離。附有粉紅色說明框寫著：「兩本生物學的書距離更遠，僅僅因為其中一本有更多字！」強調歐氏距離對文件長度的敏感性問題，此時應使用餘弦相似度。
+
+[第62頁, 圖片1] TF-IDF 直覺概念的數學公式。以大型斜體字呈現：TF-IDF ≈ Term Frequency / Document Frequency。說明 TF-IDF 的核心概念是詞頻除以文件頻率。
+
+[第63頁, 圖片1] TF-IDF 公式的詳細說明圖。中央公式為 tfidf(t, d) = tf(t, d) × idf(t)。上方有綠色標註框指向 tf(t,d) 說明「詞頻計數取決於我們計算的詞 t 和所查看的文件 d」；下方有綠色標註框指向 idf(t) 說明「文件計數僅取決於詞 t，通過對所有文件進行加總得出」。
+
+[第64頁, 圖片1] TF-IDF 詳細公式。Term Frequency 公式：tf(t, d) = # of times t appears in d（詞 t 在文件 d 中出現的次數）。Inverse Document Frequency 公式：idf(t) = log(N / N(t))，其中 N(t) 為包含詞 t 的文件數，N 為總文件數。
+
+[第65頁, 圖片1] IDF 公式 idf(t) = log(N / N(t)) 以較大字體呈現，搭配文字說明解釋為何使用對數函數：log 是單調遞增函數，可壓縮數值範圍。
+
+[第66頁, 圖片1] Python 中使用 TF-IDF 的程式碼範例。程式碼使用 Scikit-Learn：from sklearn.feature_extraction.text import TfidfVectorizer，建立 tfidf = TfidfVectorizer()，然後用 fit_transform 和 transform 處理訓練與測試資料。附有說明可傳入 stopwords、tokenizer、strip accents 等參數。
+
+[第67頁, 圖片1] Term Frequency（詞頻）變體公式展示。包含三種變體：（1）Binary（二元，詞出現為 1，否則為 0）；（2）Normalize the count（正規化計數），公式 tf(t,d) = count(t,d) / sum of count(t',d)；（3）Take the log（取對數），公式 tf(t,d) = log(1 + count(t,d))。
+
+[第68頁, 圖片1] Inverse Document Frequency（逆文件頻率）變體公式展示。包含三種變體：（1）Smooth IDF，公式 idf(t) = log(N / (N(t)+1)) + 1；（2）IDF Max，公式 idf(t) = log(max N(t') / N(t))；（3）Probabilistic IDF，公式 idf(t) = log((N - N(t)) / N(t))。
+
+[第69頁, 圖片1] TF-IDF 正規化公式。公式為 tfidf_hat(t, d) = tfidf(t, d) / ||tfidf(., d)||_p，其中 p = 1 或 2。說明 TfidfVectorizer 支援 L1 和 L2 正規化（預設為 L2）。
+
+[第71頁, 圖片1] 神經詞嵌入（Neural Word Embeddings）的 RNN 架構圖。圖中顯示一個循環神經網路（RNN）處理序列 "The quick brown fox" 的流程：每個詞依序通過 RNN 單元，產生隱藏狀態 h0 → h1 → h2 → h3 → h4，每個時間步的輸出通過 Softmax 層產生下一個詞的機率分布 P(W | context)。左側有說明框：「將 'word embedding' 視為與 'word vector' 相同的概念。」
+
+[第72頁, 圖片1] 序列模型架構圖（Sequence of Vectors）。上方為 Transformer 架構示意圖，顯示多層注意力機制（Attention）的紫色矩陣圖，帶有閃電符號表示並行計算；下方為 RNN 架構示意圖，顯示紫色方塊依序連接的序列處理流程。用以說明 CNN、RNN 和 Transformer 等專門處理序列資料的模型架構。
+
+[第75頁, 圖片1] Word2Vec Skip-gram 架構圖。左側為 one-hot 編碼的輸入向量（Vocabulary，其中一個位置為 1），通過綠色的 V × N Embedding Matrix（嵌入矩陣）得到 Hidden Layer（隱藏層，h1 到 hn），再通過紫色的 N × V Context Matrix（上下文矩陣）產生右側的 Prediction Vectors（預測向量）。右側分為 First context word 和 Last context word 的機率輸出。整體展示 Skip-gram 模型從中心詞預測上下文詞的架構。
+
+[第76頁, 圖片1] 嵌入矩陣（Embedding Matrix）說明表格。表格兩欄：Word（詞）與 Learned Word Vector (Embedding Matrix)（學習到的詞向量）。三個範例：king 對應 [0.27, -0.63, 0.89, ...]、queen 對應 [0.31, -0.60, 0.85, ...]、apple 對應 [0.12, -0.78, 0.35, ...]。可見 king 和 queen 的向量較為接近，而 apple 則差異較大，說明語義相近的詞有相似的向量。
+
+[第80頁, 圖片1] GloVe 矩陣分解（Matrix Factorization）示意圖。左側為 V × V 的藍色共現矩陣 log(X)（Target Matrix），約等於中間綠色的 V × d Center Word Vectors 矩陣 W 乘以 d × V 的綠色 Context Word Vectors 轉置矩陣 W_tilde_T，再加上右側淺藍色的 V × V Learned Word & Context Bias Terms 矩陣 (b_i + b_tilde_j)。圖示清楚標註各矩陣的維度。
+
+[第82頁, 圖片1] 詞向量應用的流程圖（What can We Do with Word Vectors）。流程從左到右：Doc（文件圖示）→ 分詞後的詞列表 ["I", "like", "cats", "and", "dogs", ...] → 各詞的向量 [vec(I), vec(like), vec(cats), ...] → AVERAGE()（取平均）。說明可將文件中每個詞的嵌入向量取平均，得到整個文件的稠密低維向量表示。
+
+[第83頁, 圖片1] 詞類比（Word Analogies）向量運算示意圖。二維座標中標示四個點：King（左下）、Man（左中）、Queen（右中）、Woman（右上）。藍色箭頭顯示 King → Queen 和 Man → Woman 的方向一致且平行，說明 King - Man ≈ Queen - Woman 的向量算術關係。
+
+[第86頁, 圖片1] NLP 應用於不同語言的多語言插圖。顯示多個卡通人物，每人旁邊有不同語言的對話泡泡，包括 English、Francais（法語）、Italiano（義大利語）、Espanol（西班牙語）、ελληνικά（希臘語）、Deutsch（德語）、日本の（日語）、中國的（中文）、русский（俄語）等。人物以簡約風格繪製，對話泡泡使用各種鮮豔顏色。
+
+[第89頁, 圖片1] 多語言模型（Multilingual Models）的向量空間示意圖。二維座標中顯示不同語言中意義相同的詞彙在向量空間中聚集在一起：上方群集包含 "cute puppy"（英文，紅色）、"chiot mignon"（法文，橘色）、"可爱的小狗"（中文，藍色）；下方群集包含 "nice weather"（英文，紅色）、"beau temps"（法文，橘色）、"好天气"（中文，藍色）。圖例標示 En（英文）、Fr（法文）、Zh（中文）三種語言的顏色對應。
