@@ -16,7 +16,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from src.settings import load_settings
-from src.retriever import retrieve_top_chunks, reload_cache
+from src.retriever import retrieve_top_chunks, retrieve_top_chunks_structured, reload_cache
 from src.answerer import answer
 from src.cache import LLMCache
 from src.llm_client import GroqClient, GeminiClient, LLMRouter
@@ -108,8 +108,9 @@ def answer_pipeline(question: str) -> tuple[str, str]:
     min_score = _settings.get("bm25_min_score", 0.5)
     max_chars = _settings.get("answer_max_chars", 50)
 
-    chunks = retrieve_top_chunks(q, top_k=top_k, min_score=min_score)
-    ans, layer = answer(q, chunks, _llm, _cache, max_chars=max_chars)
+    structured = retrieve_top_chunks_structured(q, top_k=top_k, min_score=min_score)
+    chunks = [h for _, hits in structured for h in hits]
+    ans, layer = answer(q, chunks, _llm, _cache, max_chars=max_chars, structured_chunks=structured)
     return ans, layer
 
 

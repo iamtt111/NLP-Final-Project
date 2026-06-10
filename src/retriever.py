@@ -134,6 +134,67 @@ def _bm25_wand_topk(
     return sorted([(doc_idx, s) for s, doc_idx in heap], key=lambda x: x[1], reverse=True)
 
 
+def _decompose_query(question: str) -> list[str]:
+    """Split compound questions by ？/? into sub-queries. Returns [question] if only one."""
+    import re
+    parts = re.split(r'[？?]', question)
+    parts = [p.strip() for p in parts if p.strip()]
+    return parts if len(parts) >= 2 else [question]
+
+
+def _retrieve_single(
+    question: str,
+    bm25,
+    docs: list,
+    metas: list,
+    inverted_index: dict,
+    top_k: int,
+    min_score: float,
+) -> list[ChunkHit]:
+    tokens = tokenize(question)
+    if not tokens:
+        return []
+    candidates = get_candidate_chunk_indices(tokens, inverted_index)
+    if not candidates:
+        return []
+    hits = _bm25_wand_topk(bm25, tokens, inverted_index, top_k, min_score, candidates)
+    return [
+        ChunkHit(text=docs[idx], source=metas[idx].get("source", ""), score=score)
+        for idx, score in hits
+    ]
+
+
+def retrieve_top_chunks_structured(
+    question: str,
+    top_k: int = 3,
+    min_score: float = 0.5,
+) -> list[tuple[str, list[ChunkHit]]]:
+    """Returns [(sub_query, [ChunkHit, ...]), ...]. Single-query returns 1 entry."""
+    cache = _ensure_cache()
+    if not cache:
+        return []
+
+    bm25 = cache["bm25"]
+    docs = cache["docs"]
+    metas = cache["metas"]
+    inverted_index = cache["inverted_index"]
+
+    sub_queries = _decompose_query(question)
+    sub_top_k = max(top_k, 8) if len(sub_queries) > 1 else top_k
+
+    result = []
+    seen_texts: set[str] = set()
+    for sub_q in sub_queries:
+        hits = _retrieve_single(sub_q, bm25, docs, metas, inverted_index, sub_top_k, min_score)
+        unique_hits = []
+        for h in hits:
+            if h.text not in seen_texts:
+                seen_texts.add(h.text)
+                unique_hits.append(h)
+        result.append((sub_q, unique_hits))
+    return result
+
+
 def retrieve_top_chunks(
     question: str,
     top_k: int = 3,
@@ -148,21 +209,22 @@ def retrieve_top_chunks(
     metas = cache["metas"]
     inverted_index = cache["inverted_index"]
 
-    tokens = tokenize(question)
-    if not tokens:
-        return []
+    sub_queries = _decompose_query(question)
 
-    candidates = get_candidate_chunk_indices(tokens, inverted_index)
-    if not candidates:
-        return []
+    if len(sub_queries) == 1:
+        return _retrieve_single(question, bm25, docs, metas, inverted_index, top_k, min_score)
 
-    hits = _bm25_wand_topk(bm25, tokens, inverted_index, top_k, min_score, candidates)
+    # Multi-part: retrieve with a wider top_k per sub-query to compensate for
+    # vocabulary mismatch (relevant chunks may rank lower in a focused sub-query)
+    sub_top_k = max(top_k, 8)
+    seen_texts: set[str] = set()
+    merged: list[ChunkHit] = []
+    for sub_q in sub_queries:
+        for hit in _retrieve_single(sub_q, bm25, docs, metas, inverted_index, sub_top_k, min_score):
+            if hit.text not in seen_texts:
+                seen_texts.add(hit.text)
+                merged.append(hit)
 
-    results = []
-    for idx, score in hits:
-        results.append(ChunkHit(
-            text=docs[idx],
-            source=metas[idx].get("source", ""),
-            score=score,
-        ))
-    return results
+    # Sort by score descending, keep top_k * len(sub_queries) to give LLM richer context
+    merged.sort(key=lambda h: h.score, reverse=True)
+    return merged

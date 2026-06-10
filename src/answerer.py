@@ -41,18 +41,42 @@ def _try_rules(question: str, chunk_texts: list[str]) -> tuple[str | None, str]:
     return None, ""
 
 
-def answer(question: str, chunks: list[ChunkHit], llm, cache: LLMCache | None, max_chars: int = 50) -> tuple[str, str]:
+def _build_context(chunks: list[ChunkHit], structured: list[tuple[str, list[ChunkHit]]] | None) -> tuple[str, list[str]]:
+    """Build context string and flat chunk_texts list."""
+    if structured and len(structured) > 1:
+        sections = []
+        for sub_q, sub_hits in structured:
+            texts = [h.text for h in sub_hits]  # use all retrieved hits per sub-query
+            if texts:
+                sections.append(f"[{sub_q}]\n" + "\n---\n".join(texts))
+        context = "\n\n".join(sections)
+        all_texts = [h.text for _, hits in structured for h in hits]
+    else:
+        all_texts = [c.text for c in chunks[:5]]
+        context = "\n---\n".join(all_texts)
+    return context, all_texts
+
+
+def answer(
+    question: str,
+    chunks: list[ChunkHit],
+    llm,
+    cache: LLMCache | None,
+    max_chars: int = 50,
+    structured_chunks: list[tuple[str, list[ChunkHit]]] | None = None,
+) -> tuple[str, str]:
     """Returns (answer, layer)."""
-    chunk_texts = [c.text for c in chunks]
-    if not chunk_texts:
+    if not chunks and not structured_chunks:
         return "NA", "no_chunks"
 
-    context = "\n---\n".join(chunk_texts[:3])
+    context, chunk_texts = _build_context(chunks, structured_chunks)
+    if not chunk_texts:
+        return "NA", "no_chunks"
 
     # 1. Cache hit (instant)
     cache_key = None
     if cache is not None:
-        cache_key = cache.hash_key(question, chunk_texts[:3])
+        cache_key = cache.hash_key(question, chunk_texts)
         if cached := cache.get(cache_key):
             return post_process(cached, question, max_chars=999), "cache"
 
