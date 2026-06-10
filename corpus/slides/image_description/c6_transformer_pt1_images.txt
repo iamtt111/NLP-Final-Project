@@ -1,0 +1,69 @@
+Image descriptions from: c6_transformer_pt1.pdf
+
+[第2頁, 圖片1] 此圖為一條藍色的時間軸線圖，展示了從 Transformer 到 GPT-4 之間主要語言模型的發展歷程。時間軸由左至右延伸，上方標示了 GPT 系列模型（GPT 2018/06、GPT-2 2019/02、GPT-3 2020/05、GPT-4 2023/03），下方標示了其他重要模型（Transformer 2017/06、BERT 2018/10、RoBERTa 2019/07、ALBERT 2019/09）。每個模型以藍色圓角矩形呈現，透過垂直線連接到時間軸上，清楚呈現各模型推出的時間順序與分支關係，說明 Transformer 架構如何衍生出眾多重要的預訓練語言模型。
+
+[第3頁, 圖片1] 此圖為 RNN（Recurrent Neural Network）的展開結構示意圖。左側展示了 RNN 依時間步展開的結構，包含輸入 X(t)、X(t+1) 等經過 word-embeddings 層後進入黃色的 RNN 區塊，每個時間步產生對應輸出 Y(t)、Y(t+1)，且相鄰 RNN 區塊之間有水平箭頭表示隱藏狀態的傳遞。右側則為折疊後的 RNN 單元示意，以一個自迴圈箭頭表示遞迴連接。圖下方說明了 RNN 的兩個核心問題：每個輸出依賴前一個輸出導致反向訓練時的梯度爆炸與梯度消失問題。
+
+[第4頁, 圖片1] 此圖為一個比較表格，標題為 RNN，以三欄兩列的格式比較 RNN 與 Transformer 在「並行處理能力」和「長序列距離依賴問題」兩個面向的差異。表格左欄為比較面向，中間欄位說明 RNN 的限制（需依序處理、難以並行計算；梯度消失和梯度爆炸導致難以捕捉長距離依賴），右欄說明 Transformer 的優勢（使用注意力機制可同時處理整個序列；注意力機制使模型能直接關注任意兩個位置之間的關係，更好地捕捉長距離關係）。
+
+[第5頁, 圖片1] 此圖為 Transformer 的高階架構簡化示意圖，展示了 Encoder-Decoder 的基本流程。底部有一個標示「機器翻譯」的輸入方塊，箭頭指向左側淡黃色的 Encoder 區塊，Encoder 再以箭頭連接到右側淡黃色的 Decoder 區塊，Decoder 上方箭頭指向標示「machine translate」的輸出方塊。整體呈現了 Transformer 將輸入序列透過 Encoder 編碼後，再由 Decoder 解碼產生輸出序列的基本概念。
+
+[第6頁, 圖片1] 此圖以2009年莫拉克颱風的台灣累積雨量地圖作為 Attention mechanism 的直觀類比。右側為台灣地圖，以彩色漸層標示雨量分布（藍色為低、綠色黃色為中、紅色紫色為高），圖例顯示雨量從20mm到超過3000mm的分級。圖中用紅色矩形框標示台灣中南部高雨量區域，左側文字「當第一眼看到這張圖，注意力集中在哪裡」引導觀眾理解人類視覺注意力會自然聚焦於重要區域，藉此類比說明 Attention mechanism 的核心概念。
+
+[第7頁, 圖片1] 此圖延續前頁的 Attention mechanism 類比說明，左側展示了人類認知處理流程圖：眼睛圖示代表「接收訊息」，向下箭頭標示「整張圖片」連接到橙色的 Sensory memory 區塊，再向下標示「Attention（放入重要的）」連接到黃色的 Working memory 區塊。右側同樣展示莫拉克颱風雨量地圖，紅色框標記已移至台灣中部高雨量區域。此圖說明注意力機制如同人類從感覺記憶中篩選重要資訊放入工作記憶的過程。
+
+[第8頁, 圖片1] 此圖為 Attention mechanism 認知流程的完整版本。左側展示與前頁相同的流程圖（眼睛接收訊息、Sensory memory、Attention、Working memory），右側增加了一個紅色箭頭指向紅色文字「如何依照輸入的重要性給予相應的權重」，點出注意力機制的核心問題：如何為不同輸入分配適當的權重值。
+
+[第9頁, 圖片1] 此圖說明 Machine translation 的 Sequence-to-sequence（Encoder-Decoder model）架構。左側展示資料流程：原始資料（RAW 文件圖示）經過淡黃色的 Encoder 區塊產生 hidden state（灰色圓形），再傳遞給 Decoder 區塊進行文本生成翻譯。右側展示了 Transformer 原始論文的經典架構圖，底部標示 Inputs 和 Outputs（Shifted right），中間為堆疊的 Encoder 和 Decoder 結構，頂部為 Output probabilities，來源標註為 HuggingFace NLP 課程。
+
+[第10頁, 圖片1] 此圖為不使用 Attention 的機器翻譯（Machine translation without attention）架構圖。左側為 RNN encoder 部分：底部輸入中文字「機」「器」「翻」「譯」經過 word-embeddings 層，進入四個綠色 RNN 隱藏狀態 h1 至 h4，其中最後一個狀態以黃色標示並帶有紅色箭頭，橙色曲線表示「information about the entire sentence」傳遞至右側的 RNN decoder。Decoder 以紫色/品紅色區塊呈現，從 <START> token 開始依序產生 "machine"、"translation"、"<END>" 的輸出。紅色標註說明 encoder 最終隱藏狀態傳遞給 decoder 初始隱藏狀態，強調資訊瓶頸問題。
+
+[第11頁, 圖片1] 此圖為帶有 Attention 的機器翻譯架構的 encoder 部分，說明每個隱藏狀態都會生成該詞的 Key 和 Value。左側為 RNN encoder，底部中文輸入「機」「器」「翻」「譯」經 word-embeddings 進入綠色隱藏狀態 h1 至 h4，每個隱藏狀態上方有虛線箭頭向上延伸。右側灰色方框說明「這些 Key 和 Value 就是後續 Attention 機制會用來做匹配與加權平均的依據」。
+
+[第12頁, 圖片1] 此圖展示 Attention 機制中 Query 的概念。左側為 RNN encoder（綠色 h1-h4 區塊），右上方有 decoder 的初始隱藏狀態 z0 方塊標示紅色 "Query" 字樣，從 <START> token 透過橙色曲線連接。右側紅色文字說明「當前輸入需要聚焦的部分」，並以「今天想吃的口味辣的食物」為例解釋 Query 就像需求或正在找的特徵。
+
+[第13頁, 圖片1] 此圖展示 Attention 機制中 Key 的匹配過程。左側 RNN encoder 的 h1 區塊標示為 (vector)，透過一個 "match" 方塊與右上方的 z0（decoder 初始隱藏狀態）以黑色長箭頭連接，表示計算匹配程度。紅色 "key" 標示在箭頭旁，說明「用來表示每個輸入元素的特徵」。右側以菜單類比解釋：宮保雞丁的 key 是「辣」、糖醋排骨的 key 是「甜」，key 代表每道菜的特徵或標籤。
+
+[第14頁, 圖片1] 此圖展示 Attention weights 的計算過程。左側為 RNN encoder（h1-h4），上方標示純量 alpha_0^1 代表 attention weights or similarity，說明其代表 query 向量和每個 key 向量之間的關聯度。Match 方塊連接 z0 與 encoder 的隱藏狀態。右側顯示 Transformer 版本的 Attention Weights 計算公式：Attention Weights = QK^T / sqrt(d_k)，呈現 Scaled Dot-Product Attention 的核心數學運算。
+
+[第15頁, 圖片1] 此圖展示完整的 Attention 機制中 Query、Key、Value 的關係。頂部為 z0（Query，紅色標示），下方 RNN encoder 的 h1-h4 同時扮演 Key 和 Value（紅色標示），上方四個 alpha 值表示 attention weights。右側紅色文字說明「Value 向量代表輸入的實際內容」，以菜單類比：選擇宮保雞丁時，其 Value 就是這道菜本身。底部顯示 attention 公式：attention(Q, K, V) = sum(similarity(Q, Ki) * Vi)。
+
+[第16頁, 圖片1] 此圖與第15頁相似但新增注解，說明在 RNN 架構中 key 和 value 為同樣的 h 向量，後續 Transformer 才改良成分別的 h_k 和 h_v。圖中結構相同：z0 為 Query，h1-h4 為 Key/Value，alpha 值為 attention weights，並附有 attention(Q, K, V) = sum(similarity(Q, Ki) * Vi) 的完整公式。
+
+[第18頁, 圖片1] 此圖展示 Attention 機制的完整計算流程。左下角為 RNN encoder（綠色 h1-h4 及青色輸入「機器翻譯」），每個隱藏狀態上方標示 alpha 值（attention scores），經過 softmax 層正規化後得到 alpha-bar 值，再與各自的 value 相乘（以 X 符號表示），最後透過加法符號（+）彙總得到上下文向量 c0。右側簡化顯示 decoder 的 z0 從 <START> 開始，c0 向上延伸。同時顯示 attention(Q, K, V) = sum(similarity(Q, Ki) * Vi) 的公式。整體圖示清楚呈現了從原始 attention scores 到 softmax 正規化再到加權求和的完整流程。
+
+[第19頁, 圖片1] 此圖展示 Attention 機制在 decoder 第二步的運作。與前頁結構相似，但 decoder 端已展開到 z1 步驟。左側 encoder（h1-h4）上方 match 方塊現在連接到 z1（從 z0 經 <START> 到 z1 經 "machine"），計算出新的 alpha_1^1 attention score，表示在生成第二個 token 時重新計算對 encoder 各位置的注意力。
+
+[第20頁, 圖片1] 此圖為 Attention 機制 decoder 第二步的完整計算流程。左側 encoder 部分與前頁相同，softmax 後的 alpha-bar 值顯示具體數值（0, 0, 0.5, 0.5），表示注意力集中在「翻」和「譯」兩個字上。這些值與 value 相乘後加總得到 c1 向量。右側 decoder 展示 z0 到 z1 的序列，上方分別為 c0 和 c1 上下文向量，表示每步解碼都會重新計算注意力分布。
+
+[第21頁, 圖片1] 此圖為 Attention 機制 decoder 持續展開的示意圖，與第20頁結構相同但 decoder 端擴展到 z2。Attention weights 的 alpha-bar 值仍為 (0, 0, 0.5, 0.5)。Decoder 端現在顯示完整的三步序列：z0(<START>)、z1(machine)、z2(translation)，上方對應 c0、c1 上下文向量。此圖展示 decoder 已產生 "translation" 這個詞。
+
+[第22頁, 圖片1] 此圖為 Attention 機制的完整翻譯流程圖。左側 encoder 結構不變，decoder 端完整展示：z0(<START>) 到 z1(machine) 到 z2(translation) 再到 <END>，以省略號表示更多步驟。上方 c0、c1、c2 等上下文向量對應每步解碼。此為整個帶 Attention 的機器翻譯序列到序列解碼的完整示意，展示模型如何逐步生成「machine translation <END>」的完整翻譯結果。
+
+[第25頁, 圖片1] 此圖為 Self-Attention 的直觀示意圖，以句子 "The cat sat" 為例。中央顯示三個詞 "The"、"cat"、"sat"，"The" 上方有一個向量 vector(The) 的標示。弧線箭頭從 "The" 指向自身及其他兩個詞，旁邊以紅色數字標示注意力權重：指向自身的權重為 0.2，指向 "cat" 的為 0.5，指向 "sat" 的為 0.3。底部灰色方框說明「每個 token 都根據全句的語境來重新理解自己」。此圖直觀展示了 Self-Attention 如何讓每個詞根據句中其他詞的重要性重新計算自己的表示。
+
+[第29頁, 圖片1] 此圖為三種 Attention 類型的比較表格。表格有六欄：類型、Query 來源、Key/Value 來源、是否看自己、常見位置、說明。三列分別為：(1) Attention (cross)：Query 來自一個序列，Key/Value 來自另一個序列，不看自己，常見於 Decoder，用於輸出序列根據輸入序列的資訊決定關注什麼；(2) Self-Attention：Query/Key/Value 都來自序列自身，會看自己，常見於 Encoder/Decoder，每個詞都看整個句子包括自己來捕捉上下文關係；(3) Multi-Head Attention：多組分開的 Q/K/V（切分後的向量），同上（依附於 self 或 cross），會看自己，常見於 Encoder/Decoder，把 Attention 機制做多次從多種角度學語意提升表示力。
+
+[第31頁, 圖片1] 此圖說明 BERT 模型的基本概念與文字轉換流程。上方文字說明 BERT 使用 Transformer Encoder 架構搭配 Multi-Head Self-Attention 進行雙向語境理解的非監督式預訓練。下方展示一個簡化的處理流程：中文文字「晴天」和「霹靂」分別經過「每一個詞轉為向量」步驟變成 word embedding 向量 [0,1,0,0,0] 和 [0,0,0,1,0]，這些向量匯入 BERT 模型，最終產生 Contextual representation。此圖說明 BERT 如何將純文字轉換為考慮上下文的向量表示。
+
+[第36頁, 圖片1] 此圖為 BERT 預訓練和微調的架構對比圖，取自 BERT 原始論文（arxiv.org/pdf/1810.04805.pdf）。左側為 Pre-training 階段：底部輸入為 Unlabeled Sentence A and B Pair（含 Masked Sentence A 和 Masked Sentence B），經過 BERT 模型（藍色區塊），頂部輸出 NSP 和 Mask LM 的預測。右側為 Fine-Tuning 階段：底部輸入為 Question Answer Pair（含 Question 和 Paragraph），經過相同 BERT 模型，頂部輸出 MNLI、NER、SQuAD 和 Start/End Span 等任務預測。兩階段間以虛線箭頭連接表示參數轉移。此圖完整呈現 BERT 的兩階段訓練範式：先在大量未標記資料上預訓練，再針對特定下游任務微調。
+
+[第38頁, 圖片1] 此圖為 BERT 主要模型的架構比較圖。左側為 BERT_BASE：以淡綠色方塊堆疊表示 12 層 encoder blocks（標示 block 1 到 block 12），外框為橙色虛線標示 encoder。右側為 BERT_LARGE：同樣以淡綠色方塊堆疊但有 24 層（block 1 到 block 24），外框同為橙色。上方文字說明 BERT Base 有 12 層、12 個 attention heads、110M 參數，BERT Large 有 24 層、16 個 attention heads、340M 參數。此圖直觀比較了兩種 BERT 模型的規模差異。
+
+[第40頁, 圖片1] 此圖為 BERT 預處理的輸入表示結構圖，取自原始論文。以句子 "[CLS] my dog is cute [SEP] he likes play ##ing [SEP]" 為例，展示三層 embedding 的組成：最上層為 Input（粉色方塊，各個 token），第二層為 Token Embeddings（黃色方塊，E_[CLS]、E_my 等），第三層為 Segment Embeddings（綠色方塊，E_A 和 E_B 區分兩個句子），最底層為 Position Embeddings（灰色方塊，E_0 到 E_10 表示位置資訊）。各層之間以加號連接。標註說明 [CLS] 用於每個序列之首，[SEP] 用於分開兩個句子的輸入。
+
+[第42頁, 圖片1] 此圖為 BERT 預處理的 Segment Embeddings 詳細說明版本。與第40頁相同的三層 embedding 結構圖，但 Segment Embeddings 層以紅色矩形框特別標示，左側標註「句子A」對應所有 E_A（涵蓋 [CLS] my dog is cute [SEP]），右側標註「句子B」對應所有 E_B（涵蓋 he likes play ##ing [SEP]）。此圖強調 Segment Embeddings 如何區分 BERT 輸入中的兩個不同句子，用於成對句子任務如問答。
+
+[第44頁, 圖片1] 此圖為 BERT 預訓練的 Next Sentence Prediction (NSP) 任務示意圖。左側有兩個藍色方塊分別標示「句子A」和「句子B」，以虛線箭頭連接到中間灰色的 BERT 模型方塊。BERT 方塊右側輸出「判斷」，分為兩個結果（以青色方塊呈現）：上方為「B是語料庫中A之後的下一句子」，下方為「語料庫中的一句隨機句子」。此圖說明 NSP 任務讓 BERT 學習判斷兩個句子是否為連續的上下文關係。
+
+[第46頁, 圖片1] 此圖為 BERT 微調用於句子分類任務的架構圖。底部輸入包含 [CLS] 和句子中的 w1、w2、w3 等 token（淡黃色 sentence 標示），經過橙色的 BERT 模型（標註 Fine-tune），每個 token 產生黃色的輸出向量。[CLS] 位置的輸出向量傳入綠色的 Linear Classifier（標註 Trained from Scratch），最終輸出 class。右側說明 Input 為 single sentence，output 為 class，範例包括 Sentiment analysis 和 Document Classification。
+
+[第47頁, 圖片1] 此圖為 BERT 微調用於詞彙級分類（Slot filling）任務的架構圖。底部輸入結構與句子分類相同（[CLS]、w1、w2、w3），經過 BERT 模型，但此處每個 token 的輸出都分別連接到各自的綠色 Linear Cls（線性分類器），每個分類器獨立輸出一個 class。右側說明 Input 為 single sentence，output 為 class of each word，範例為 Slot filling：「arrive Taipei on November 2nd」中每個詞被標記為 other、dest、other、time、time 等類別。
+
+[第48頁, 圖片1] 此圖為 BERT 微調用於句子關係判斷（Natural Language Inference）任務的架構圖。底部輸入為兩個句子：Sentence 1（[CLS]、w1、w2）和 Sentence 2（[SEP]、w3、w4、w5），以 [SEP] 分隔。經過橙色的 BERT 模型後，開頭 [CLS] 位置的輸出連接到紫色的 Linear Classifier，輸出 Class。右側說明 Input 為 two sentences、output 為 class，範例為 Natural Language Inference：給定 premise 判斷 hypothesis 是 True/False/unknown。
+
+[第50頁, 圖片1] 此圖為 BERT 變體模型的關係圖。中央為灰色的 BERT 方塊，周圍以箭頭連接六個衍生模型：上方 RoBERTa（2019/07，更大更強）、左上 ALBERT（2019/09，矩陣分解、參數共享、內存更小）、右上 ELECTRA（2020/03，對抗學習、訓練高效）、左下 XLNet（2019/06，結合 Permutation Language Model 和 Transformer XL 機制）、右下 TinyBERT（2019/9，模型更小、推理更快）。此圖以放射狀佈局展示 BERT 如何衍生出針對不同目標優化的多種後續模型。
+
+[第53頁, 圖片1] 此圖為 XLNet 中 Transformer 與 Transformer-XL 訓練方式的比較圖。右側標題為「Transformer (Training)」，顯示兩個獨立的 segment（Segment 1: x1-x4，Segment 2: x5-x8），各自為三層全連接的神經網路結構（以圓點和連線表示），兩個 segment 之間有箭頭表示順序處理但無資訊共享。此圖說明傳統 Transformer 一次性處理固定長度文本時的 Context Fragmentation 問題。
+
+[第54頁, 圖片1] 此圖為 Transformer-XL (Training) 的架構示意圖，展示其改進方案。左側為 Fixed (No Grad) 區域包含 x1-x8，右側為 New Segment 包含 x9-x12，兩者合為四層結構。關鍵差異在於新 segment 的底層（以藍色/深色圓點表示）能夠接收前一 segment 各層隱藏狀態的連線（以綠色線條表示），實現跨 segment 的資訊傳遞。虛線框標示前一 segment 的狀態被保留但不計算梯度（Fixed, No Grad）。此圖展示 Segment-level Recurrence Mechanism 如何讓模型在處理新片段時保留前一片段的記憶。

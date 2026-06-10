@@ -1,0 +1,71 @@
+Image descriptions from: c5_DL_models.pdf
+
+[第10頁, 圖片1] 此圖展示 Padding and Truncation 的概念，用於說明在 Tensorflow 中輸入序列必須等長的問題。左側顯示一個未填充的 unpadded_sequences 列表，包含三個不等長的序列 [1, 2, 3, 4, 5]、[1, 6, 7, 4, 8] 和 [1, 9, 10]，中間以紅色文字標註「GPU 無法處理這個 3x? 的矩陣，除非將 batch size 改為 1」，右側顯示填充後的 padded_sequences，其中較短的序列在前方補零變為 [0, 0, 1, 9, 10]，使所有序列長度一致。一個黑色粗箭頭從左指向右，表示 padding 轉換過程。此圖說明 RNN 通常在序列前端填充零，因為 RNN 難以記住過去的資訊。
+
+[第13頁, 圖片1] 此圖展示 One-Hot Encoding 的局限性，標題為「Is One-Hot Encoding Enough?」。左側是一個二維散佈圖，顯示藍色和紅色兩群資料點的分佈，並以虛線標示出可能的分類邊界，下方綠色方塊標註「Recall: vectors should be useful」，強調向量應具有幾何意義。右側是一個三維立方體圖，八個頂點分別標示二進位編碼 000、001、010、011、100、101、110、111，並在對應位置標註詞彙如 cat (100)、feline (010)、airplane (001)，展示 one-hot encoding 中語義相近的詞（如 cat 和 feline）在空間中距離並不接近的問題。此圖用於教學說明為何 one-hot 向量在幾何上不具有語義有用性。
+
+[第14頁, 圖片1] 此圖標題為「Big Picture」，展示 word embedding 的核心概念。圖中呈現兩組詞彙在向量空間中的分佈：左側為粉紅色圓點代表的動物類詞彙（cat、feline、jaguar），右側為綠色圓點代表的交通工具類詞彙（airplane、helicopter、jet）。從一個共同的原點出發，灰色線條連接到各個詞彙點，形成放射狀結構。語義相近的詞彙（如 cat、feline、jaguar）在空間中彼此靠近，而不同語義類別的詞彙（動物 vs. 交通工具）則分佈在不同區域，視覺化呈現了 word embedding 如何將語義關係映射到向量空間的結構。
+
+[第18頁, 圖片1] 此圖展示 1-D Convolution 的滑動過程。標題為「1-D Convolution」，說明「Slide the filter along every position, multiply and add」。圖中顯示一個長度為 4 的輸入序列 [0, 3, 4, 5]，以及一個大小為 2 的 filter [1, 2]（以紅色框線標示）。分三個步驟（I、II、III）展示 filter 在不同位置的滑動：步驟 I 中 filter 對準位置 0 和 3，步驟 II 對準位置 3 和 4，步驟 III 對準位置 4 和 5。每個步驟中紅色框線標示當前 filter 覆蓋的區域，示範了一維卷積的基本運算流程。
+
+[第19頁, 圖片1] 此圖為「1-D Convolution Example」的完整計算範例。上方顯示 Input sequence 為 [1, 2, 3, 2, 1]，中間顯示 Filter 為 [1, -1]，下方顯示卷積運算的 Result 為 [-1, -1, 1, 1]。此圖以表格形式清晰展示輸入序列、卷積核和輸出結果，讓學生能直觀理解一維卷積的逐元素相乘再相加的計算過程。
+
+[第20頁, 圖片1] 此圖標題為「Convolution on Text」，展示如何將 1-D convolution 應用於文本資料。左側是一個 6x3 的 embedding 矩陣，每一行代表一個詞彙（this、movie、has、amazing、diverse、characters）的 3 維 word embedding 向量，數值以表格呈現。上方兩行（this 和 movie）以青色（cyan）背景標示，表示目前 filter 覆蓋的範圍。右側顯示一個 6x1 的輸出向量（空白欄位），為卷積運算的結果。此圖說明在 NLP 中，1-D convolution 的 filter 沿著序列方向滑動，每次覆蓋若干個連續詞彙的 embedding。
+
+[第21頁, 圖片1] 此圖標題為「1-D Convolutional Kernels」，詳細解釋卷積核的維度結構。圖中央顯示一個 2x3 的青色矩陣，數值為 [[0.5, 0.4, 0.7], [0.2, -0.1, 0.3]]。左側以橘色文字標示「height = numbers of words to look at in sequence」，上方以藍色文字標示「width = length of embedding」。下方的灰色說明框解釋：建立 1-D Conv layer 時不需要指定 width（即 embedding size），正如使用 2-D Conv layer 時不需要處理 depth（即 input channels）。此圖幫助學生理解文本卷積中 kernel 的 height 對應 n-gram 的大小，width 自動匹配 embedding 維度。
+
+[第22頁, 圖片1] 此圖標題為「Recognizing General Patterns」，展示 CNN 如何在不同文本片段中識別相似的語義模式。圖分上下兩組：上方為句子「the good movie」的 embedding 矩陣（粉色背景），與青色的 filter 矩陣進行卷積運算，右側展示逐元素相乘再相加的詳細計算過程，結果為 0.54（綠色）。下方為句子「a fantastic song」的 embedding 矩陣（粉色背景），同樣與相同 filter 進行運算，結果為 0.53（綠色）。底部以文字標示「Found pattern: a positive thing」（positive 以紫色標示），說明同一個 filter 能在不同文本中偵測到「正面事物」的共同語義模式。
+
+[第23頁, 圖片1] 此圖展示 CNN 用於文本分類的完整表格，列出各層的 Layer 名稱、Output Shape 和 Description。從上到下依序為：Input (batch_size, 100) 對應 Token ID 序列、Embedding (batch_size, 100, 50) 對應詞向量、Conv1D 32 filters (batch_size, 98, 32) 對應區域特徵、MaxPool1D(3) (batch_size, 32, 32) 對應降維、Conv1D 64 filters (batch_size, 30, 64) 對應更深層特徵、MaxPool1D(3) (batch_size, 10, 64) 對應再降維、Conv1D 128 filters (batch_size, 8, 128) 對應更深層次抽象、GlobalMaxPool1D (batch_size, 128) 對應變成固定長度的句子表示、Dense(1) (batch_size, 1) 對應預測結果（如情感分類）。此表格清晰呈現 CNN 文本分類模型各層的維度變化與功能。
+
+[第26頁, 圖片1] 此圖標題為「Recurrent Neural Networks Introduction」，展示一個基本的 feedforward neural network 結構。圖中有三層節點：左側兩個米色圓形節點為輸入層，中間三個米色圓形節點為隱藏層，右側兩個米色圓形節點為輸出層。各層之間以灰色箭頭全連接，展示標準前饋神經網路的結構，作為與 RNN 對比的基礎。
+
+[第27頁, 圖片1] 此圖為第 26 頁的延伸版本，標題仍為「Recurrent Neural Networks Introduction」，在原有的 feedforward network 結構上增加了 recurrent connections。隱藏層的三個節點之間新增了彩色的循環連接線（紅色、橘色、淺藍色的曲線和迴圈），從每個隱藏節點繞回自身或連接到其他隱藏節點，並以青色箭頭標示。下方以紅色中文文字標註「傳遞給下一個時間點的自己」，解釋這些 recurrent connections 的功能是將隱藏狀態傳遞給下一個時間步的自身，這正是 RNN 的核心特徵。
+
+[第28頁, 圖片1] 此圖標題為「Why should we use RNNs?」，展示一個簡單的 ANN 用於詞性分類（POS tagging）的架構。圖中為一個垂直排列的三層結構：底部為輸入節點 x（標示 Input word），中間為隱藏節點 h，頂部為輸出節點 y（標示 Output POS tag）。節點之間以箭頭連接，從下往上依序為 x -> h -> y。此圖說明使用普通 ANN 逐詞分類時，每個詞獨立處理，無法考慮上下文資訊。
+
+[第30頁, 圖片1] 此圖標題為「Back to Our Classification Problem - ANN」，展示使用 ANN 處理序列分類問題的架構。圖中水平排列了五組獨立的三層網路結構（x -> h -> y），分別對應 Word 1 到 Word T（中間以省略號表示）。每組結構包含底部的 x 節點、中間的 h 節點和頂部的 y 節點，上方標示 Output 1 到 Output T。重要的是各組之間沒有任何連接，說明 ANN 獨立處理每個詞，無法捕捉序列中的上下文依賴關係。
+
+[第31頁, 圖片1] 此圖標題為「Back to Our Classification Problem - RNN」，與第 30 頁的 ANN 結構對比。同樣水平排列五組 x -> h -> y 結構，但關鍵差異在於隱藏層節點之間新增了粉紅色（magenta）的水平箭頭連接，從 h(Word 1) 指向 h(Word 2)、h(Word 2) 指向 h(Word 3)，依此類推。這些粉紅色箭頭代表 RNN 的 recurrent connections，使每個時間步的隱藏狀態能接收前一步的資訊，實現序列建模能力。
+
+[第32頁, 圖片1] 此圖為第 31 頁的進階版本，標題仍為「Back to Our Classification Problem - RNN」。在 RNN 展開結構的基礎上，新增了一條綠色曲線，從 Word 1 的 x 節點一路延伸到 Word T 的 y 節點（Output T 以綠色箭頭標示），形成一個跨越整個序列的長距離路徑。這條綠色路徑視覺化展示了 RNN 如何透過隱藏狀態的傳遞，讓第一個詞的資訊最終能影響最後一個時間步的輸出，說明 RNN 捕捉長距離依賴的能力。
+
+[第33頁, 圖片1] 此圖標題為「Problem Types RNNs Can Solve」，展示 RNN 的兩種主要問題類型。右上方為「many to one」的架構圖，顯示多個輸入（粉紅色方塊在底部）、綠色隱藏層方塊（帶水平箭頭）和頂部單一藍色輸出方塊，適用於 spam detection 和 sentiment analysis。右側為「many to many」的架構圖，結構類似但頂部有多個藍色輸出方塊對應每個時間步，適用於 part-of-speech tagging 和 time series anomaly detection。兩種架構並排比較，清楚展示 RNN 輸入輸出的不同配置。
+
+[第34頁, 圖片1] 此圖標題為「What Do We Do with h(t)?」，展示 RNN 展開後的隱藏狀態序列。底部為五個 x 節點（輸入），中間為五個 h 節點（隱藏層），以水平箭頭依序連接，每個 h 節點上方標示 h_1、h_2、h_3、...、h_T。此圖強調 h(t) 是 RNN 在每個時間步的輸出，為後續說明如何使用這些隱藏狀態做預測奠定基礎。
+
+[第35頁, 圖片1] 此圖延續「What Do We Do with h(t)?」的主題，展示 Many-to-One 的架構。與第 34 頁相同的 RNN 展開結構，但在最右側的最後一個 h 節點（h_T）上方新增了一個 y 節點，並以綠色氣泡標註「Only compute this for many-to-one」。此圖說明在 many-to-one 任務中，只取最後一個時間步的隱藏狀態 h_T 來計算輸出 y。
+
+[第36頁, 圖片1] 此圖展示「What Do We Do with h(t)?」的 Many-to-Many 架構。RNN 展開結構中，每個 h 節點上方都連接一個 y 節點，形成 x -> h -> y 在每個時間步都有對應輸出的完整結構。h 節點之間依然有水平箭頭連接，標示 h_1 到 h_T。此圖說明在 many-to-many 任務中，每個時間步都產生一個輸出預測。
+
+[第37頁, 圖片1] 此圖為第 36 頁的補充版本，同樣展示 Many-to-Many RNN 架構，但新增了一個灰色說明框，標註「Note: the same weights are used at every time step for each layer (weight sharing)」，強調 RNN 的權重共享特性：每個時間步使用相同的權重矩陣，這是 RNN 能處理可變長度序列的關鍵設計。
+
+[第38頁, 圖片1] 此圖標題為「Other Options for Many-to-One」，比較 CNN 和 RNN 兩種架構處理 many-to-one 問題的方式。上方為 CNN 的流程圖：T x D input 依序經過藍色 Conv 方塊、粉紅色 Pool 方塊、再經過 Conv 和 Pool，最終輸出 T x M output，以 3D 方塊視覺化表示各層。下方為 RNN 的流程圖：展開的 h 節點序列（h_1 到 h_T）以箭頭連接，並以灰色說明框標註「Also T x M output, since we have T hidden vectors each of size M」。此圖強調兩種模型在序列處理時輸出維度的對應關係。
+
+[第39頁, 圖片1] 此圖延續第 38 頁的比較，展示 CNN 和 RNN 如何透過 Global Max Pool 實現 many-to-one 輸出。上方 CNN 部分增加了 Global Max Pool（粉紅色方塊）和 Dense（灰色方塊），綠色氣泡標註「In both cases, we reduce T x M to M」。下方 RNN 部分顯示所有 h 節點的輸出經過一個粉紅色的 Global Max Pool 長條方塊，再接 Dense 層。此圖說明無論使用 CNN 或 RNN，都可以透過 Global Max Pooling 將可變長度的序列表示壓縮為固定長度向量。
+
+[第40頁, 圖片1] 此圖為第 39 頁的進一步標註版本，在 RNN + Global Max Pool 的架構圖上新增了橘色（orange）的路徑標示：從第一個 h 節點旁的黃色標籤「Terrible」出發，經過 Global Max Pool 層，最終連接到黃色標籤「Sentiment: negative」。此橘色曲線展示了在情感分析任務中，即使「Terrible」出現在序列開頭，Global Max Pool 仍能捕捉其重要特徵，最終正確預測負面情感。
+
+[第41頁, 圖片1] 此圖標題為「Stacking RNN Layers」，展示堆疊 RNN 層的架構。右側為一個垂直排列的多層結構：底部為 x 節點（標示 T x D），上方為第一層隱藏節點 h（標示 T x M_1，帶有 recurrent 迴圈箭頭），再上方為第二層隱藏節點 h'（標示 T x M_2，同樣帶有迴圈箭頭），頂部為輸出 y。右側有黑色方塊作為層級指示。此圖配合文字說明強調 sequence length T 和 hidden size M 的區別，以及通常 M1 = M2 的設計慣例。
+
+[第42頁, 圖片1] 此圖標題為「RNN in Tensorflow」，展示 ANN 與 RNN 在程式碼和結構上的對比。左側上方為 ANN 的程式碼框（Input -> Dense -> Dense），左下方為 RNN 的程式碼框（Input -> SimpleRNN -> Dense），兩者分別對應左側和右側的網路結構圖。左側 ANN 結構為垂直的 x -> h -> y 三層。右側 RNN 結構為 x -> h -> y 三層，但 h 節點帶有 recurrent 迴圈箭頭（黑色方塊標示），展示程式碼的簡潔對應：只需將 Dense 替換為 SimpleRNN 即可建立 RNN 模型。
+
+[第43頁, 圖片1] 此圖標題為「Output: Many-to-One」，展示 SimpleRNN 的 many-to-one 輸出模式。上方為 Keras 程式碼框，下方為對應的 many to one 架構示意圖，以彩色方塊表示：底部粉紅色為輸入層（標示 Input: {x_1, x_2, ..., x_T} (T x D)），中間綠色為隱藏層（標示 Produces {h_1, h_2, ..., h_T}, but only h_T is kept (M)），頂部藍色為輸出層（標示 Output: y_T (K vector)）。綠色氣泡標註各層的輸出形狀與含義。
+
+[第44頁, 圖片1] 此圖標題為「Output: Many-to-Many」，展示設定 return_sequences=True 時的輸出模式。程式碼框中 SimpleRNN(M, return_sequences=True) 以粗體標示關鍵參數。下方的 many to many 架構圖同樣以彩色方塊呈現，綠色氣泡標示隱藏層「Produce {h_1, h_2, ..., h_T}, and keep everything (T x M)」，上方輸出層標示「Produce {y1, y2, ..., yT} (T x K)」，說明此模式下每個時間步都產生輸出。
+
+[第46頁, 圖片1] 此圖標題為「Output: Many-to-One (another way)」，展示使用 return_sequences=True 搭配 GlobalMaxPooling1D 實現 many-to-one 的替代方法。程式碼框中顯示 SimpleRNN -> GlobalMaxPooling1D -> Dense 的流程。下方架構圖為 many to one 模式，底部輸入層上方為隱藏層，再經過 GlobalMaxPool 層（粉紅色長條標示 GlobalMaxPool），頂部為輸出。綠色氣泡標註「Output again is a vector of size M」，說明此方法透過 pooling 將所有時間步的隱藏狀態聚合為單一向量。
+
+[第47頁, 圖片1] 此圖標題為「Stacking Layers」，展示如何堆疊多層 SimpleRNN。程式碼框中顯示兩層 SimpleRNN(32)，第一層設定 return_sequences=True，第二層使用預設的 return_sequences=False。右側為 many to many stacked 的架構圖，以三層彩色方塊垂直堆疊呈現：底部粉紅色為輸入層，中間兩層綠色為兩個堆疊的 RNN 隱藏層，頂部藍色為輸出層，各層間以箭頭連接。
+
+[第49頁, 圖片1] 此圖標題為「Modern RNN Units」，展示 LSTM（Long Short-Term Memory）的經典架構圖。圖中為三個串聯的 LSTM cell，以黃色/淺綠色方塊表示。每個 cell 內部包含多個門控機制：sigma（sigmoid）門和 tanh 門以粉紫色圓形節點表示，以及乘法（x）和加法（+）運算節點。cell 之間有水平的 cell state 線（上方傳輸線）和 hidden state 線。每個 cell 底部接收 x_{t-1}、x_t、x_{t+1} 的輸入，頂部輸出 h_{t-1}、h_t、h_{t+1}。圖中清楚展示了 LSTM 的 forget gate、input gate、output gate 和 cell state 的資訊流動路徑。
+
+[第52頁, 圖片1] 此圖標題為「Gated Recurrent Unit (GRU)」，以方塊圖比較 SimpleRNN 和 GRU 的輸入輸出介面。上方為 SimpleRNN 的方塊：左側輸入 x(t) 和 h(t-1)，右側輸出 h(t)，方塊內標示 SimpleRNN，以淺綠色填充。下方為 GRU 的方塊：同樣左側輸入 x(t) 和 h(t-1)，右側輸出 h(t)，方塊內標示 GRU，以淺綠色填充。此圖強調 GRU 與 SimpleRNN 具有相同的外部 API（介面），差異僅在內部計算機制。
+
+[第57頁, 圖片1] 此圖標題為「Interpreting the GRU」，以數學公式配合直觀解釋展示 GRU 的運算邏輯。上方為 GRU 的核心公式 h_t = (1 - z_t) * h_{t-1} + z_t * tanh(...)，下方以灰色箭頭將各項映射到直觀解釋：h_t = p(keep h_{t-1}) * h_{t-1} + p(discard h_{t-1}) * SimpleRNN(x_t, h_{t-1})。此圖以視覺化箭頭標示從數學公式到語義解釋的對應關係，幫助理解 update gate z(t) 如何控制「保留舊記憶」與「使用新計算結果」之間的權衡。
+
+[第59頁, 圖片1] 此圖標題為「LSTM (Long Short-Term Memory)」，並排展示 RNN、LSTM 和 GRU 三種循環單元的內部結構比較。左側為最簡單的 RNN，僅包含一個 tanh 運算。中間為 LSTM，結構最為複雜，包含 forget gate (f_t)、input gate (i_t)、output gate (o_t)，以及 cell state 候選值，內部有多個 sigma 和 tanh 節點，cell state (c_t) 以水平線在頂部傳遞。右側為 GRU，包含 reset gate (r_t) 和 update gate (z_t)，以及一個 1- 運算節點，結構介於 RNN 和 LSTM 之間。三者均以淺綠色背景繪製，粉紅色圓形標示各種門控運算節點，黑色箭頭標示資訊流向，清楚對比三種架構的複雜度差異。
+
+[第60頁, 圖片1] 此圖標題為「GRU vs LSTM」，以方塊圖比較 GRU 和 LSTM 的輸入輸出介面差異。左側為 GRU 方塊：輸入 x(t) 和 h(t-1)，輸出 h(t)，旁邊以紅色文字標示各端口含義——x(t) 為 Current word，h(t-1) 為 Short-term memory。右側為 LSTM 方塊：輸入 x(t)、h(t-1) 和 c(t-1)，輸出 h(t) 和 c(t)。紅色文字標示 c(t-1) 為 Long-term memory。此圖清楚展示 LSTM 比 GRU 多了一個 cell state (c) 作為長期記憶通道，是兩者最主要的結構差異。
+
+[第61頁, 圖片1] 此圖標題為「LSTM Equations」，以數學公式展示 LSTM 的完整運算方程式。圖中列出五個核心公式，右側以灰色文字標註每個公式對應的門控名稱：f_t = sigma(...) 對應 Forget gate、i_t = sigma(...) 對應 Input/update gate、o_t = sigma(...) 對應 Output gate、c_t = f_t * c_{t-1} + i_t * f_c(...) 為 cell state 更新（其中 f_c 標註為 tanh，並以引號標示此部分等同於 "Simple RNN"）、h_t = o_t * f_h(c_t) 為 hidden state 輸出（f_h 同樣標註為 tanh）。此圖完整呈現 LSTM 各門控的數學定義及其相互關係。
