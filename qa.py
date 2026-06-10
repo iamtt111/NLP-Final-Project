@@ -38,13 +38,15 @@ def _init_llm(settings: dict) -> LLMRouter:
     primary = None
     fallback = None
 
+    max_tokens = settings.get("llm_max_tokens", 1024)
+
     groq_key = os.environ.get(primary_cfg.get("api_key_env", "GROQ_API_KEY"), "")
     if groq_key:
-        primary = GroqClient(api_key=groq_key, model=primary_cfg.get("model", "qwen-2.5-32b"), timeout=timeout)
+        primary = GroqClient(api_key=groq_key, model=primary_cfg.get("model", "qwen-2.5-32b"), timeout=timeout, max_tokens=max_tokens)
 
     gemini_key = os.environ.get(fallback_cfg.get("api_key_env", "GEMINI_API_KEY"), "")
     if gemini_key:
-        fallback = GeminiClient(api_key=gemini_key, model=fallback_cfg.get("model", "gemini-2.5-flash"), timeout=timeout)
+        fallback = GeminiClient(api_key=gemini_key, model=fallback_cfg.get("model", "gemini-2.5-flash"), timeout=timeout, max_tokens=max_tokens)
 
     if not primary and fallback:
         primary = fallback
@@ -59,8 +61,21 @@ def normalize_query(q: str) -> str:
     return re.sub(r"\s+", " ", q).strip()
 
 
+def detect_encoding(path: str) -> str:
+    with open(path, "rb") as f:
+        raw = f.read()
+    for enc in ("utf-8-sig", "utf-8", "big5", "cp950", "gb2312", "latin-1"):
+        try:
+            raw.decode(enc)
+            return enc
+        except (UnicodeDecodeError, LookupError):
+            continue
+    return "utf-8"
+
+
 def read_csv_column_a(path: str) -> list[str]:
-    with open(path, "r", encoding="utf-8-sig", newline="") as f:
+    enc = detect_encoding(path)
+    with open(path, "r", encoding=enc, newline="") as f:
         return [row[0] for row in csv.reader(f) if row and row[0].strip()]
 
 
