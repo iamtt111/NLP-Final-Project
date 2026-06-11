@@ -19,5 +19,15 @@ def post_process(ans: str, question: str, max_chars: int = 50) -> str:
         ans = re.sub(p, "", ans, flags=re.IGNORECASE)
     ans = ans.strip(' 。"\'""''')
     if len(ans) > max_chars:
-        ans = ans[:max_chars].rstrip()
+        # Prefer cutting at the last sentence boundary before max_chars
+        last_end = max(
+            ans.rfind('。', 0, max_chars),
+            ans.rfind('！', 0, max_chars),
+            ans.rfind('？', 0, max_chars),
+            ans.rfind('\n', 0, max_chars),
+        )
+        if last_end > max_chars // 2:
+            ans = ans[:last_end + 1].rstrip()
+        else:
+            ans = ans[:max_chars].rstrip()
     return ans
