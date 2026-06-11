@@ -82,7 +82,10 @@ if "!NEED_REBUILD!"=="1" (
     )
 )
 
-:: 5. Launch Streamlit
+:: 5. Ensure output directory exists
+if not exist "output" mkdir output
+
+:: 6. Launch Streamlit
 echo.
 echo Starting Streamlit UI...
 echo Open your browser at http://localhost:8501

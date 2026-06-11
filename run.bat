@@ -112,13 +112,18 @@ if "!CSV_COUNT!"=="1" (
     )
 )
 
+:: 6. Build output filename: {input_file_name}_{timestamp}.csv
+for %%f in ("!SELECTED_CSV!") do set "INPUT_NAME=%%~nf"
+for /f "tokens=*" %%t in ('powershell -NoProfile -Command "Get-Date -Format 'yyyyMMdd_HHmmss'"') do set "TIMESTAMP=%%t"
+set "OUTPUT_FILE=output\!INPUT_NAME!_!TIMESTAMP!.csv"
+
 :: 6. Run QA
 echo.
 echo Running QA pipeline...
 echo   Input:  !SELECTED_CSV!
-echo   Output: output\answers.csv
+echo   Output: !OUTPUT_FILE!
 echo.
-python qa.py --input "!SELECTED_CSV!" --output output/answers.csv --workers 4
+python qa.py --input "!SELECTED_CSV!" --output "!OUTPUT_FILE!" --workers 4
 if errorlevel 1 (
     echo [ERROR] QA pipeline failed.
     pause
@@ -128,12 +133,7 @@ if errorlevel 1 (
 :: 7. Open output
 echo.
 echo ====================================
-echo   Done! Opening output\answers.csv
+echo   Done! Opening !OUTPUT_FILE!
 echo ====================================
-for /f "delims=" %%o in ('dir /b /o-d output\answers_*.csv 2^>nul') do (
-    start "" "output\%%o"
-    goto :done_open
-)
-start "" "output\answers.csv"
-:done_open
+start "" "!OUTPUT_FILE!"
 pause
