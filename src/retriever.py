@@ -137,8 +137,11 @@ def _bm25_wand_topk(
 def _decompose_query(question: str) -> list[str]:
     """Split compound questions by ？/? into sub-queries. Returns [question] if only one."""
     import re
-    parts = re.split(r'[？?]', question)
-    parts = [p.strip() for p in parts if p.strip()]
+    # Temporarily mask ？ that appears inside 「...」 so they won't be split on
+    protected = re.sub(r'「[^」]*」', lambda m: m.group().replace('？', '\x00'), question)
+    parts = re.split(r'[？?]', protected)
+    # Restore masked ？ and strip whitespace
+    parts = [p.replace('\x00', '？').strip() for p in parts if p.strip()]
     return parts if len(parts) >= 2 else [question]
 
 
