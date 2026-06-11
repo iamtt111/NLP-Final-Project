@@ -19,7 +19,7 @@ from src.settings import load_settings
 from src.retriever import retrieve_top_chunks, retrieve_top_chunks_structured, reload_cache
 from src.answerer import answer
 from src.cache import LLMCache
-from src.llm_client import GroqClient, GeminiClient, LLMRouter
+from src.llm_client import GroqClient, GeminiClient, LLMRouter, KeyPoolClient
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
@@ -34,25 +34,36 @@ def _init_llm(settings: dict) -> LLMRouter:
     primary_cfg = settings.get("llm_primary", {})
     fallback_cfg = settings.get("llm_fallback", {})
     timeout = settings.get("llm_timeout_seconds", 10.0)
-
-    primary = None
-    fallback = None
-
     max_tokens = settings.get("llm_max_tokens", 1024)
 
-    groq_key = os.environ.get(primary_cfg.get("api_key_env", "GROQ_API_KEY"), "")
-    if groq_key:
-        primary = GroqClient(api_key=groq_key, model=primary_cfg.get("model", "qwen-2.5-32b"), timeout=timeout, max_tokens=max_tokens)
+    def _build_pool(cfg, client_cls):
+        base_env = cfg.get("api_key_env", "")
+        clients = []
+        for suffix in ("", "_2", "_3", "_4"):
+            key = os.environ.get(f"{base_env}{suffix}", "")
+            if key:
+                clients.append(client_cls(
+                    api_key=key,
+                    model=cfg.get("model", ""),
+                    timeout=timeout,
+                    max_tokens=max_tokens,
+                ))
+        if not clients:
+            return None
+        return KeyPoolClient(clients) if len(clients) > 1 else clients[0]
 
-    gemini_key = os.environ.get(fallback_cfg.get("api_key_env", "GEMINI_API_KEY"), "")
-    if gemini_key:
-        fallback = GeminiClient(api_key=gemini_key, model=fallback_cfg.get("model", "gemini-2.5-flash"), timeout=timeout, max_tokens=max_tokens)
+    primary = _build_pool(primary_cfg, GroqClient)
+    fallback = _build_pool(fallback_cfg, GeminiClient)
 
     if not primary and fallback:
         primary = fallback
         fallback = None
     if not primary:
         return None
+
+    n_primary = len(primary._clients) if isinstance(primary, KeyPoolClient) else 1
+    n_fallback = len(fallback._clients) if isinstance(fallback, KeyPoolClient) else (1 if fallback else 0)
+    log.info(f"LLM pool: primary={n_primary} key(s), fallback={n_fallback} key(s)")
 
     return LLMRouter(primary=primary, fallback=fallback)
 

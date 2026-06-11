@@ -2,11 +2,10 @@
   "corpus_folder": "./corpus",
   "chunk_size": 300,
   "chunk_overlap": 60,
-  "top_k": 8,
-  "bm25_min_score": 0.2,
-  "answer_max_chars": 300,
+  "top_k": 5,
+  "bm25_min_score": 0.5,
+  "answer_max_chars": 200,
   "llm_max_tokens": 1024,
-
   "llm_primary": {
     "provider": "groq",
     "model": "llama-3.3-70b-versatile",
@@ -18,7 +17,6 @@
     "api_key_env": "GEMINI_API_KEY"
   },
   "llm_timeout_seconds": 15,
-
   "cache_path": "./data/llm_cache.json",
   "workers": 4
 }

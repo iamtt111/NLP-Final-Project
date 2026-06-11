@@ -79,9 +79,10 @@ class _RateLimiter:
         with self._lock:
             now = time.monotonic()
             wait_until = self._last + self._interval
-            if now < wait_until:
-                time.sleep(wait_until - now)
-            self._last = time.monotonic()
+            # Claim the next slot and release the lock immediately
+            self._last = max(now, wait_until)
+            sleep_time = max(0.0, wait_until - now)
+        time.sleep(sleep_time)  # sleep outside lock so workers run concurrently
 
 
 class GeminiClient:
@@ -94,7 +95,7 @@ class GeminiClient:
         self.model_name = model
         self.timeout = timeout
         self.max_tokens = max_tokens
-        self._limiter = _RateLimiter(rpm=4)  # per-instance so each key gets its own 4 RPM budget
+        self._limiter = _RateLimiter(rpm=10)  # Gemini 2.5 Flash free tier: 15 RPM
 
     def short_answer(self, question: str, context: str, max_chars: int = 50) -> str:
         from google.genai import types
@@ -152,4 +153,11 @@ class KeyPoolClient:
             return client
 
     def short_answer(self, question: str, context: str, max_chars: int = 50) -> str:
-        return self._next().short_answer(question, context, max_chars)
+        last_err: Exception | None = None
+        for _ in range(len(self._clients)):
+            try:
+                return self._next().short_answer(question, context, max_chars)
+            except Exception as e:
+                log.warning(f"KeyPoolClient: key failed ({type(e).__name__}), trying next")
+                last_err = e
+        raise last_err
