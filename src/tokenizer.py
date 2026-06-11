@@ -10,6 +10,7 @@ import jieba
 jieba.setLogLevel(20)
 
 ENG_TOKEN = re.compile(r"[A-Za-z][A-Za-z0-9\-]*")
+_STRIP_PUNCT = re.compile(r"^[^\w]+|[^\w]+$")
 
 
 def tokenize(text: str) -> list[str]:
@@ -17,6 +18,9 @@ def tokenize(text: str) -> list[str]:
     tokens: list[str] = []
     for seg in re.split(r"(\s+)", text):
         seg = seg.strip()
+        if not seg:
+            continue
+        seg = _STRIP_PUNCT.sub("", seg)
         if not seg:
             continue
         if ENG_TOKEN.fullmatch(seg):

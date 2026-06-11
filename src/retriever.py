@@ -158,6 +158,10 @@ def _retrieve_single(
     if not candidates:
         return []
     hits = _bm25_wand_topk(bm25, tokens, inverted_index, top_k, min_score, candidates)
+    # If strict threshold returns nothing, fall back to best-effort (score ≥ 0) so the
+    # LLM always receives some context instead of hitting the no_chunks short-circuit.
+    if not hits:
+        hits = _bm25_wand_topk(bm25, tokens, inverted_index, top_k, 0.0, candidates)
     return [
         ChunkHit(text=docs[idx], source=metas[idx].get("source", ""), score=score)
         for idx, score in hits
