@@ -26,6 +26,6 @@ Image descriptions from: c0_course_introduction.pdf
 
 [第16頁, 圖片1] 三種 NLP 表示方法的示意圖並排展示。左圖：二維向量空間圖，展示詞嵌入（Word Embedding）的語意關係，包含 man/woman、king/queen、cat/cats、dog/dogs 等類比關係，以及 France-Paris、England-London、Italy-Rome 等國家-首都對應關係。中圖：比較級/最高級詞彙關係，以箭頭表示 slow→slower→slowest、fast→faster→fastest、long→longer→longest，以及性別對應 father/mother→son/daughter、boy/girl、he/she、himself/herself。右圖：以 Bob_Dylan 為中心的知識圖譜（Knowledge Graph），透過標記邊（comprise、explore、write、adopt、record、draw 等）連接至 The_Freewheelin'_Bob_Dylan、Folk_music、Country_music、Duluth,_Minnesota 等實體節點。
 
-[第17頁, 圖片1] 下一個詞預測（Word Prediction）範例圖。句子「the students opened their ______」留有空白待填入，四個候選詞以藍色橢圓泡泡顯示，並標註各自的機率：books（0.2）、laptops（0.1）、exams（無標註）、minds（0.1），其中 minds 下方另有一個紅色方框標註 0.6。此圖說明語言模型/下一個詞預測的概念。
+[第17頁, 圖片1] 下一個詞預測（Word Prediction）範例圖。句子「the students opened their ______」留有空白待填入，四個候選詞以藍色橢圓泡泡顯示，並標註各自的機率：books（0.2）、laptops（0.1）、exams（無標註）、minds（0.6）。此圖說明語言模型/下一個詞預測的概念。
 
 [第18頁, 圖片1] 機器學習模型應用總覽表格，分為四個色塊區域。左上橘色區塊：Spam Detection（垃圾郵件偵測），用途為 email filtering、SMS spam detection、phishing detection，方法為 Naive Bayes、SVM、Random Forest。右上綠色區塊：Sentiment Analysis（情緒分析），用途為 reputation management、stock market、customer feedback，方法為 Logistic Regression、SVM、BERT、Random Forest。左下黃色區塊：Latent Semantic Indexing（潛在語意索引），用途為 information retrieval、document clustering、search engines，方法為 PCA / SVD。右下藍色區塊：Topic Modeling（主題建模），用途為 legal document classification、news categorization、recommendation systems，方法為 Latent Dirichlet Allocation。

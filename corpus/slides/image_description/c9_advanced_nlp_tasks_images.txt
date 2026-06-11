@@ -8,4 +8,7 @@ Image descriptions from: c9_advanced_nlp_tasks.pdf
 
 [第9頁, 圖片1] BIO Format（BIO 標記格式）說明表格。B 代表實體的開頭（Begin），I 代表實體的內部（Inside），O 代表非實體（Outside）。範例句子「Steve Jobs was the CEO of Apple headquartered in Silicon Valley」的標記：Steve = B-PER、Jobs = I-PER、was/the/CEO/of = O、Apple = B-ORG、headquartered/in = O、Silicon = B-LOC、Valley = I-LOC。
 
-[第56頁, 圖片1] Contrastive Learning（對比學習）訓練過程視覺化，包含兩張二維空間散佈圖。上圖為 Step 0（初始狀態），Contrastive Loss = 2.45，三個點（錨點 Anchor 白色、正樣本 Positive 藍色、負樣本 Negative 粉色）距離相近且混雜，藍色箭頭標示「吸引相似特徵（Pulling）」，虛線箭頭標示「排斥相異特徵（Pushing）」。下圖為 Step 100（訓練後），Contrastive Loss = 0.25，正樣本與錨點靠近（上方），負樣本被推遠至下方，展示對比學習成功將相似樣本拉近、相異樣本推遠的效果。
+[第56頁, 圖片1] Contrastive Learning（對比學習）訓練過程視覺化，包含兩張二維空間散佈圖。上圖為 Step 0（初始狀態），Contrastive Loss = 2.45，三個點（錨點 Anchor 白色、正樣本 Positive 藍色、負樣本 Negative 粉色）距離相近且混雜，藍色箭頭標示「吸引相似特徵（Pulling）」，虛線箭頭標示「排斥相異特徵（Pushing）」。
+
+[第56頁, 圖片2] 下圖為 Step 100（訓練後），Contrastive Loss = 0.25，正樣本與錨點靠近（上方），負樣本被推遠至下方，展示對比學習成功將相似樣本拉近、相異樣本推遠的效果。
+
