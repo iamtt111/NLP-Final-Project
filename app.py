@@ -8,10 +8,33 @@ import io
 import os
 import time
 import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import streamlit as st
 from dotenv import load_dotenv
+
+
+def parse_keys(raw: str) -> list[str]:
+    """Split a multi-line / comma-separated key string into a clean list."""
+    keys = []
+    for part in raw.replace(",", "\n").splitlines():
+        k = part.strip()
+        if k:
+            keys.append(k)
+    return keys
+
+
+def env_keys(prefix: str) -> str:
+    """Collect API keys from env: PREFIX, PREFIX_1 … PREFIX_4 (deduplicated, order preserved)."""
+    seen: set[str] = set()
+    result: list[str] = []
+    for var in [prefix] + [f"{prefix}_{i}" for i in range(1, 5)]:
+        k = os.environ.get(var, "").strip()
+        if k and k not in seen:
+            seen.add(k)
+            result.append(k)
+    return "\n".join(result)
 
 
 def read_csv_auto(path: Path) -> list[list[str]]:
@@ -64,18 +87,25 @@ with col_csv:
                 st.write(f"{i}. {row[0]}")
 
 with col_keys:
-    groq_key = st.text_input(
-        "Groq API Key",
-        value=os.environ.get("GROQ_API_KEY", ""),
-        type="password",
-        help="主要 LLM",
+    groq_keys_input = st.text_area(
+        "Groq API Keys（每行一把，最多 4 把）",
+        value=env_keys("GROQ_API_KEY"),
+        height=120,
+        help="主要 LLM；多把 key 平行分流",
     )
-    gemini_key = st.text_input(
-        "Gemini API Key",
-        value=os.environ.get("GEMINI_API_KEY", ""),
-        type="password",
-        help="備援 LLM",
+    gemini_keys_input = st.text_area(
+        "Gemini API Keys（每行一把，最多 4 把）",
+        value=env_keys("GEMINI_API_KEY"),
+        height=80,
+        help="備援 LLM（Groq 全部失敗時啟用）",
     )
+
+groq_keys = parse_keys(groq_keys_input)
+gemini_keys = parse_keys(gemini_keys_input)
+
+if groq_keys or gemini_keys:
+    total = len(groq_keys) + len(gemini_keys)
+    st.caption(f"已偵測到 {len(groq_keys)} 把 Groq key、{len(gemini_keys)} 把 Gemini key，共 {total} 把")
 
 st.divider()
 
@@ -83,7 +113,7 @@ st.divider()
 # 2. Execute section
 # ---------------------------------------------------------------------------
 if st.button("開始問答", type="primary", use_container_width=True):
-    if not groq_key and not gemini_key:
+    if not groq_keys and not gemini_keys:
         st.error("請至少輸入一個 API Key（Groq 或 Gemini）。")
         st.stop()
 
@@ -108,23 +138,25 @@ if st.button("開始問答", type="primary", use_container_width=True):
     with st.spinner("載入 BM25 索引..."):
         reload_cache()
 
-    # Build LLM router with user-provided keys
-    primary = None
-    fallback = None
+    # Build LLM router with key pools
     timeout = settings.get("llm_timeout_seconds", 15.0)
+    primary_model = settings.get("llm_primary", {}).get("model", "llama-3.3-70b-versatile")
+    fallback_model = settings.get("llm_fallback", {}).get("model", "gemini-2.5-flash")
 
-    if groq_key:
-        primary_model = settings.get("llm_primary", {}).get("model", "llama-3.3-70b-versatile")
-        primary = GroqClient(api_key=groq_key, model=primary_model, timeout=timeout)
-    if gemini_key:
-        fallback_model = settings.get("llm_fallback", {}).get("model", "gemini-2.5-flash")
-        fallback = GeminiClient(api_key=gemini_key, model=fallback_model, timeout=timeout)
+    groq_clients = [GroqClient(api_key=k, model=primary_model, timeout=timeout) for k in groq_keys]
+    gemini_clients = [GeminiClient(api_key=k, model=fallback_model, timeout=timeout) for k in gemini_keys]
 
-    if not primary and fallback:
-        primary = fallback
-        fallback = None
+    # Pair each Groq key with a Gemini key (cycle Gemini if fewer keys than Groq)
+    n_pairs = len(groq_clients) or len(gemini_clients)
+    routers = []
+    for i in range(n_pairs):
+        g   = groq_clients[i]                              if i < len(groq_clients)   else None
+        gem = gemini_clients[i % len(gemini_clients)]      if gemini_clients          else None
+        primary = g or gem
+        fallback = gem if g else None
+        routers.append(LLMRouter(primary=primary, fallback=fallback))
 
-    llm = LLMRouter(primary=primary, fallback=fallback) if primary else None
+    n_workers = min(len(routers), len(questions))
 
     cache_path = settings.get("cache_path", "data/llm_cache.json")
     llm_cache = LLMCache(cache_path)
@@ -133,25 +165,54 @@ if st.button("開始問答", type="primary", use_container_width=True):
     min_score = settings.get("bm25_min_score", 0.5)
     max_chars = settings.get("answer_max_chars", 200)
 
-    # Run pipeline
-    results = []
-    progress = st.progress(0, text="執行中...")
+    # Run pipeline — parallel across key pool
+    results = [None] * len(questions)
+    progress = st.progress(0, text=f"平行執行中（{n_workers} workers）...")
     status_text = st.empty()
 
-    for i, q in enumerate(questions):
-        q_clean = re.sub(r"\s+", " ", q).strip()
-        chunks = retrieve_top_chunks(q_clean, top_k=top_k, min_score=min_score)
-        ans, layer = answer(q_clean, chunks, llm, llm_cache, max_chars=max_chars)
-        results.append({"問題": q, "答案": ans, "Layer": layer})
+    def _run_one(item):
+        i, q_raw = item
+        q = re.sub(r"\s+", " ", q_raw).strip()
+        chunks = retrieve_top_chunks(q, top_k=top_k, min_score=min_score)
+        ans, layer = "NA", "failed"
+        for offset in range(len(routers)):
+            router = routers[(i + offset) % len(routers)]
+            ans, layer = answer(q, chunks, router, llm_cache, max_chars=max_chars)
+            if layer not in ("sentence_picker", "failed"):
+                break
+        return i, q_raw, ans, layer
 
-        pct = (i + 1) / len(questions)
-        progress.progress(pct, text=f"執行中... ({i+1}/{len(questions)})")
-        status_text.caption(f"最新: {q[:40]}... → {ans[:40]}...")
+    with ThreadPoolExecutor(max_workers=n_workers) as executor:
+        futures = {executor.submit(_run_one, (i, q)): i for i, q in enumerate(questions)}
+        completed = 0
+        for future in as_completed(futures):
+            i, q_raw, ans, layer = future.result()
+            results[i] = {"問題": q_raw, "答案": ans, "Layer": layer}
+            completed += 1
+            progress.progress(completed / len(questions), text=f"平行執行中... ({completed}/{len(questions)})")
+            status_text.caption(f"最新完成: {q_raw[:40]}...")
 
     progress.progress(1.0, text="完成！")
     status_text.empty()
 
+    # Build CSV bytes and save to output/ exactly once
+    out_buf = io.StringIO()
+    out_writer = csv.writer(out_buf)
+    for r in results:
+        out_writer.writerow([r["問題"], r["答案"]])
+    csv_bytes = out_buf.getvalue().encode("utf-8-sig")
+
+    input_stem = Path(selected_csv).stem
+    timestamp = time.strftime('%Y%m%d_%H%M%S')
+    out_filename = f"{input_stem}_{timestamp}.csv"
+
+    out_dir = Path("output")
+    out_dir.mkdir(exist_ok=True)
+    (out_dir / out_filename).write_bytes(csv_bytes)
+
     st.session_state["results"] = results
+    st.session_state["csv_bytes"] = csv_bytes
+    st.session_state["out_filename"] = out_filename
 
 # ---------------------------------------------------------------------------
 # 3. Results section
@@ -184,16 +245,14 @@ if "results" in st.session_state:
     )
 
     # Download
-    output = io.StringIO()
-    writer = csv.writer(output)
-    for r in results:
-        writer.writerow([r["問題"], r["答案"]])
-    csv_bytes = output.getvalue().encode("utf-8-sig")
+    out_filename = st.session_state["out_filename"]
+    csv_bytes = st.session_state["csv_bytes"]
 
     st.download_button(
         label="下載結果 CSV",
         data=csv_bytes,
-        file_name=f"answers_{time.strftime('%Y%m%d_%H%M%S')}.csv",
+        file_name=out_filename,
         mime="text/csv",
         use_container_width=True,
     )
+    st.caption(f"已自動儲存至 output/{out_filename}")

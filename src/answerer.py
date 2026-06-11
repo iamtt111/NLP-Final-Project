@@ -41,18 +41,31 @@ def _try_rules(question: str, chunk_texts: list[str]) -> tuple[str | None, str]:
     return None, ""
 
 
+import re as _re
+_IMG_CHUNK = _re.compile(r'^\[第\d+頁')
+
+
+def _sort_chunks(hits: list[ChunkHit]) -> list[ChunkHit]:
+    """Text chunks before image-description chunks (same BM25 order within each group)."""
+    non_img = [c for c in hits if not _IMG_CHUNK.match(c.text)]
+    img     = [c for c in hits if     _IMG_CHUNK.match(c.text)]
+    return non_img + img
+
+
 def _build_context(chunks: list[ChunkHit], structured: list[tuple[str, list[ChunkHit]]] | None) -> tuple[str, list[str]]:
     """Build context string and flat chunk_texts list."""
     if structured and len(structured) > 1:
         sections = []
         for sub_q, sub_hits in structured:
-            texts = [h.text for h in sub_hits]  # use all retrieved hits per sub-query
+            sorted_hits = _sort_chunks(sub_hits)
+            texts = [h.text for h in sorted_hits]
             if texts:
                 sections.append(f"[{sub_q}]\n" + "\n---\n".join(texts))
         context = "\n\n".join(sections)
-        all_texts = [h.text for _, hits in structured for h in hits]
+        all_texts = [h.text for _, hits in structured for h in _sort_chunks(hits)]
     else:
-        all_texts = [c.text for c in chunks[:5]]
+        sorted_chunks = _sort_chunks(chunks)
+        all_texts = [c.text for c in sorted_chunks[:5]]
         context = "\n---\n".join(all_texts)
     return context, all_texts
 

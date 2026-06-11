@@ -87,9 +87,6 @@ class _RateLimiter:
 class GeminiClient:
     """Fallback LLM. Uses AI Studio key (no Vertex/GCP needed)."""
 
-    # Free tier: 5 RPM for gemini-2.5-flash — keep under limit
-    _limiter = _RateLimiter(rpm=4)
-
     def __init__(self, api_key: str, model: str = "gemini-2.5-flash", timeout: float = 15.0, max_tokens: int = 1024):
         from google import genai
 
@@ -97,6 +94,7 @@ class GeminiClient:
         self.model_name = model
         self.timeout = timeout
         self.max_tokens = max_tokens
+        self._limiter = _RateLimiter(rpm=4)  # per-instance so each key gets its own 4 RPM budget
 
     def short_answer(self, question: str, context: str, max_chars: int = 50) -> str:
         from google.genai import types
@@ -106,28 +104,18 @@ class GeminiClient:
             + USER_TEMPLATE.format(question=question, context=context)
         )
 
-        max_retries = 3
-        for attempt in range(max_retries):
-            self._limiter.wait()
-            try:
-                resp = self.client.models.generate_content(
-                    model=self.model_name,
-                    contents=prompt,
-                    config=types.GenerateContentConfig(
-                        temperature=0,
-                        top_p=1,
-                        top_k=1,
-                        max_output_tokens=self.max_tokens,
-                    ),
-                )
-                return resp.text.strip()
-            except Exception as e:
-                if "429" in str(e) and attempt < max_retries - 1:
-                    wait = 25 * (attempt + 1)
-                    log.warning(f"Gemini 429, retry in {wait}s (attempt {attempt + 1}/{max_retries})")
-                    time.sleep(wait)
-                else:
-                    raise
+        self._limiter.wait()
+        resp = self.client.models.generate_content(
+            model=self.model_name,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0,
+                top_p=1,
+                top_k=1,
+                max_output_tokens=self.max_tokens,
+            ),
+        )
+        return resp.text.strip()
 
 
 class LLMRouter:
@@ -145,3 +133,23 @@ class LLMRouter:
             if self.fallback:
                 return self.fallback.short_answer(question, context, max_chars)
             raise
+
+
+class KeyPoolClient:
+    """Round-robin pool — distributes requests across multiple LLM clients (thread-safe)."""
+
+    def __init__(self, clients: list[LLMClient]):
+        if not clients:
+            raise ValueError("KeyPoolClient requires at least one client")
+        self._clients = clients
+        self._idx = 0
+        self._lock = threading.Lock()
+
+    def _next(self) -> LLMClient:
+        with self._lock:
+            client = self._clients[self._idx % len(self._clients)]
+            self._idx += 1
+            return client
+
+    def short_answer(self, question: str, context: str, max_chars: int = 50) -> str:
+        return self._next().short_answer(question, context, max_chars)
