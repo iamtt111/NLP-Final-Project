@@ -93,19 +93,26 @@ with col_keys:
         height=120,
         help="主要 LLM；多把 key 平行分流",
     )
+    cerebras_keys_input = st.text_area(
+        "Cerebras API Keys（每行一把，最多 4 把）",
+        value=env_keys("CEREBRAS_API_KEY"),
+        height=80,
+        help="第二主力 LLM；Groq 耗盡時接手",
+    )
     gemini_keys_input = st.text_area(
         "Gemini API Keys（每行一把，最多 4 把）",
         value=env_keys("GEMINI_API_KEY"),
         height=80,
-        help="備援 LLM（Groq 全部失敗時啟用）",
+        help="備援 LLM（Groq 與 Cerebras 全部失敗時啟用）",
     )
 
 groq_keys = parse_keys(groq_keys_input)
+cerebras_keys = parse_keys(cerebras_keys_input)
 gemini_keys = parse_keys(gemini_keys_input)
 
-if groq_keys or gemini_keys:
-    total = len(groq_keys) + len(gemini_keys)
-    st.caption(f"已偵測到 {len(groq_keys)} 把 Groq key、{len(gemini_keys)} 把 Gemini key，共 {total} 把")
+if groq_keys or cerebras_keys or gemini_keys:
+    total = len(groq_keys) + len(cerebras_keys) + len(gemini_keys)
+    st.caption(f"已偵測到 {len(groq_keys)} 把 Groq key、{len(cerebras_keys)} 把 Cerebras key、{len(gemini_keys)} 把 Gemini key，共 {total} 把")
 
 st.divider()
 
@@ -113,8 +120,8 @@ st.divider()
 # 2. Execute section
 # ---------------------------------------------------------------------------
 if st.button("開始問答", type="primary", use_container_width=True):
-    if not groq_keys and not gemini_keys:
-        st.error("請至少輸入一個 API Key（Groq 或 Gemini）。")
+    if not groq_keys and not cerebras_keys and not gemini_keys:
+        st.error("請至少輸入一個 API Key（Groq、Cerebras 或 Gemini）。")
         st.stop()
 
     # Read questions
@@ -126,10 +133,10 @@ if st.button("開始問答", type="primary", use_container_width=True):
 
     # Initialize system
     from src.settings import load_settings
-    from src.retriever import retrieve_top_chunks, reload_cache
+    from src.retriever import retrieve_top_chunks_structured, reload_cache
     from src.answerer import answer
     from src.cache import LLMCache
-    from src.llm_client import GroqClient, GeminiClient, LLMRouter
+    from src.llm_client import GroqClient, CerebrasClient, GeminiClient, LLMRouter
 
     import re
 
@@ -140,23 +147,29 @@ if st.button("開始問答", type="primary", use_container_width=True):
 
     # Build LLM router with key pools
     timeout = settings.get("llm_timeout_seconds", 15.0)
-    primary_model = settings.get("llm_primary", {}).get("model", "llama-3.3-70b-versatile")
-    fallback_model = settings.get("llm_fallback", {}).get("model", "gemini-2.5-flash")
+    primary_model   = settings.get("llm_primary",   {}).get("model", "llama-3.3-70b-versatile")
+    secondary_model = settings.get("llm_secondary", {}).get("model", "llama3.3-70b")
+    fallback_model  = settings.get("llm_fallback",  {}).get("model", "gemini-2.5-flash")
 
-    groq_clients = [GroqClient(api_key=k, model=primary_model, timeout=timeout) for k in groq_keys]
-    gemini_clients = [GeminiClient(api_key=k, model=fallback_model, timeout=timeout) for k in gemini_keys]
+    gemini_rpm = settings.get("gemini_rpm", 15)
+    groq_clients     = [GroqClient(api_key=k,     model=primary_model,   timeout=timeout) for k in groq_keys]
+    cerebras_clients = [CerebrasClient(api_key=k, model=secondary_model, timeout=timeout) for k in cerebras_keys]
+    gemini_clients   = [GeminiClient(api_key=k,   model=fallback_model,  timeout=timeout, rpm=gemini_rpm) for k in gemini_keys]
 
-    # Pair each Groq key with a Gemini key (cycle Gemini if fewer keys than Groq)
-    n_pairs = len(groq_clients) or len(gemini_clients)
+    # Build routers: Groq + Cerebras first (no fallback = fast fail on 429),
+    # then Gemini as last-resort routers — only reached after all primary LLMs fail
     routers = []
-    for i in range(n_pairs):
-        g   = groq_clients[i]                              if i < len(groq_clients)   else None
-        gem = gemini_clients[i % len(gemini_clients)]      if gemini_clients          else None
-        primary = g or gem
-        fallback = gem if g else None
-        routers.append(LLMRouter(primary=primary, fallback=fallback))
+    for clients in (groq_clients, cerebras_clients):
+        for c in clients:
+            routers.append(LLMRouter(primary=c, fallback=None))
+    for g in gemini_clients:
+        routers.append(LLMRouter(primary=g, fallback=None))
+    if not routers:
+        st.error("請至少輸入一個 API Key（Groq、Cerebras 或 Gemini）。")
+        st.stop()
 
-    n_workers = min(len(routers), len(questions))
+    # workers 可獨立於 key 數設定（付費 API 1 把 key 可支援高併發）
+    n_workers = min(settings.get("workers", len(routers)), len(questions))
 
     cache_path = settings.get("cache_path", "data/llm_cache.json")
     llm_cache = LLMCache(cache_path)
@@ -173,11 +186,17 @@ if st.button("開始問答", type="primary", use_container_width=True):
     def _run_one(item):
         i, q_raw = item
         q = re.sub(r"\s+", " ", q_raw).strip()
-        chunks = retrieve_top_chunks(q, top_k=top_k, min_score=min_score)
+        structured = retrieve_top_chunks_structured(q, top_k=top_k, min_score=min_score)
+        if len(structured) > 1:
+            chunks = [h for _, hits in structured for h in hits]
+            structured_arg = structured
+        else:
+            chunks = structured[0][1] if structured else []
+            structured_arg = None
         ans, layer = "NA", "failed"
         for offset in range(len(routers)):
             router = routers[(i + offset) % len(routers)]
-            ans, layer = answer(q, chunks, router, llm_cache, max_chars=max_chars)
+            ans, layer = answer(q, chunks, router, llm_cache, max_chars=max_chars, structured_chunks=structured_arg)
             if layer not in ("sentence_picker", "failed"):
                 break
         return i, q_raw, ans, layer

@@ -88,14 +88,14 @@ class _RateLimiter:
 class GeminiClient:
     """Fallback LLM. Uses AI Studio key (no Vertex/GCP needed)."""
 
-    def __init__(self, api_key: str, model: str = "gemini-2.5-flash", timeout: float = 15.0, max_tokens: int = 1024):
+    def __init__(self, api_key: str, model: str = "gemini-2.5-flash", timeout: float = 15.0, max_tokens: int = 1024, rpm: int = 15):
         from google import genai
 
         self.client = genai.Client(api_key=api_key)
         self.model_name = model
         self.timeout = timeout
         self.max_tokens = max_tokens
-        self._limiter = _RateLimiter(rpm=10)  # Gemini 2.5 Flash free tier: 15 RPM
+        self._limiter = _RateLimiter(rpm=rpm)
 
     def short_answer(self, question: str, context: str, max_chars: int = 50) -> str:
         from google.genai import types
@@ -130,6 +130,30 @@ class GeminiClient:
                         time.sleep(delay)
                         continue
                 raise
+
+
+class CerebrasClient:
+    """Secondary primary LLM. Free tier: 1M TPD, 30 RPM."""
+
+    def __init__(self, api_key: str, model: str = "llama3.3-70b", timeout: float = 15.0, max_tokens: int = 1024):
+        from cerebras.cloud.sdk import Cerebras
+
+        self.client = Cerebras(api_key=api_key)
+        self.model = model
+        self.timeout = timeout
+        self.max_tokens = max_tokens
+
+    def short_answer(self, question: str, context: str, max_chars: int = 50) -> str:
+        resp = self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT.format(max_chars=max_chars)},
+                {"role": "user", "content": USER_TEMPLATE.format(question=question, context=context)},
+            ],
+            temperature=0,
+            max_tokens=self.max_tokens,
+        )
+        return resp.choices[0].message.content.strip()
 
 
 class LLMRouter:

@@ -187,7 +187,7 @@ def retrieve_top_chunks_structured(
     inverted_index = cache["inverted_index"]
 
     sub_queries = _decompose_query(question)
-    sub_top_k = max(top_k, 8) if len(sub_queries) > 1 else top_k
+    sub_top_k = max(4, top_k // 2) if len(sub_queries) > 1 else top_k
 
     result = []
     seen_texts: set[str] = set()

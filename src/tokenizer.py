@@ -24,7 +24,10 @@ def tokenize(text: str) -> list[str]:
         if not seg:
             continue
         if ENG_TOKEN.fullmatch(seg):
-            tokens.append(seg.lower())
+            lowered = seg.lower()
+            tokens.append(lowered)
+            if '-' in lowered:
+                tokens.append(lowered.replace('-', ''))
         else:
             tokens.extend(t for t in jieba.cut(seg) if t.strip())
     # Keep English single chars (formula variables), filter single CJK chars

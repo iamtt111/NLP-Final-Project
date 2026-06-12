@@ -4,19 +4,25 @@
   "chunk_overlap": 60,
   "top_k": 7,
   "bm25_min_score": 0.5,
-  "answer_max_chars": 200,
+  "answer_max_chars": 500,
   "llm_max_tokens": 1024,
   "llm_primary": {
     "provider": "groq",
     "model": "llama-3.3-70b-versatile",
     "api_key_env": "GROQ_API_KEY"
   },
+  "llm_secondary": {
+    "provider": "cerebras",
+    "model": "gpt-oss-120b",
+    "api_key_env": "CEREBRAS_API_KEY"
+  },
   "llm_fallback": {
     "provider": "gemini",
     "model": "gemini-2.5-flash",
     "api_key_env": "GEMINI_API_KEY"
   },
-  "llm_timeout_seconds": 15,
+  "llm_timeout_seconds": 30,
   "cache_path": "./data/llm_cache.json",
-  "workers": 4
+  "gemini_rpm": 10,
+  "workers": 18
 }
