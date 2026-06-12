@@ -99,24 +99,37 @@ class GeminiClient:
 
     def short_answer(self, question: str, context: str, max_chars: int = 50) -> str:
         from google.genai import types
+        import re
 
         prompt = (
             SYSTEM_PROMPT.format(max_chars=max_chars) + "\n\n"
             + USER_TEMPLATE.format(question=question, context=context)
         )
 
-        self._limiter.wait()
-        resp = self.client.models.generate_content(
-            model=self.model_name,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=0,
-                top_p=1,
-                top_k=1,
-                max_output_tokens=self.max_tokens,
-            ),
-        )
-        return resp.text.strip()
+        for attempt in range(3):
+            self._limiter.wait()
+            try:
+                resp = self.client.models.generate_content(
+                    model=self.model_name,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        temperature=0,
+                        top_p=1,
+                        top_k=1,
+                        max_output_tokens=self.max_tokens,
+                    ),
+                )
+                return resp.text.strip()
+            except Exception as e:
+                err_str = str(e)
+                if ("429" in err_str or "RESOURCE_EXHAUSTED" in err_str) and attempt < 2:
+                    match = re.search(r"retryDelay[\"'\s:]+(\d+)s", err_str)
+                    delay = int(match.group(1)) if match else 30
+                    if delay <= 60:
+                        log.warning(f"GeminiClient: rate limited, waiting {delay}s (attempt {attempt + 1}/3)")
+                        time.sleep(delay)
+                        continue
+                raise
 
 
 class LLMRouter:

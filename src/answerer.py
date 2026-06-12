@@ -41,15 +41,9 @@ def _try_rules(question: str, chunk_texts: list[str]) -> tuple[str | None, str]:
     return None, ""
 
 
-import re as _re
-_IMG_CHUNK = _re.compile(r'^\[第\d+頁')
-
-
 def _sort_chunks(hits: list[ChunkHit]) -> list[ChunkHit]:
-    """Text chunks before image-description chunks (same BM25 order within each group)."""
-    non_img = [c for c in hits if not _IMG_CHUNK.match(c.text)]
-    img     = [c for c in hits if     _IMG_CHUNK.match(c.text)]
-    return non_img + img
+    """Sort by BM25 score descending so the most relevant chunk is always first."""
+    return sorted(hits, key=lambda h: h.score, reverse=True)
 
 
 def _build_context(chunks: list[ChunkHit], structured: list[tuple[str, list[ChunkHit]]] | None) -> tuple[str, list[str]]:

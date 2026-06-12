@@ -2,7 +2,7 @@
   "corpus_folder": "./corpus",
   "chunk_size": 300,
   "chunk_overlap": 60,
-  "top_k": 5,
+  "top_k": 7,
   "bm25_min_score": 0.5,
   "answer_max_chars": 200,
   "llm_max_tokens": 1024,
