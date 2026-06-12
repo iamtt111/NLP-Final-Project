@@ -19,7 +19,7 @@ from src.settings import load_settings
 from src.retriever import retrieve_top_chunks, retrieve_top_chunks_structured, reload_cache
 from src.answerer import answer
 from src.cache import LLMCache
-from src.llm_client import GroqClient, GeminiClient, LLMRouter, KeyPoolClient
+from src.llm_client import GroqClient, CerebrasClient, GeminiClient, LLMRouter, KeyPoolClient
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
@@ -30,13 +30,25 @@ _cache: LLMCache | None = None
 _settings: dict = {}
 
 
+_PROVIDER_CLS = {
+    "groq": GroqClient,
+    "cerebras": CerebrasClient,
+    "gemini": GeminiClient,
+}
+
+
 def _init_llm(settings: dict) -> LLMRouter:
     primary_cfg = settings.get("llm_primary", {})
+    secondary_cfg = settings.get("llm_secondary", {})
     fallback_cfg = settings.get("llm_fallback", {})
     timeout = settings.get("llm_timeout_seconds", 10.0)
     max_tokens = settings.get("llm_max_tokens", 1024)
 
-    def _build_pool(cfg, client_cls):
+    def _build_pool(cfg):
+        provider = cfg.get("provider", "")
+        client_cls = _PROVIDER_CLS.get(provider)
+        if not client_cls:
+            return None
         base_env = cfg.get("api_key_env", "")
         clients = []
         for suffix in ("", "_2", "_3", "_4"):
@@ -52,20 +64,28 @@ def _init_llm(settings: dict) -> LLMRouter:
             return None
         return KeyPoolClient(clients) if len(clients) > 1 else clients[0]
 
-    primary = _build_pool(primary_cfg, GroqClient)
-    fallback = _build_pool(fallback_cfg, GeminiClient)
+    primary = _build_pool(primary_cfg)
+    secondary = _build_pool(secondary_cfg)
+    fallback = _build_pool(fallback_cfg)
 
-    if not primary and fallback:
-        primary = fallback
-        fallback = None
+    # 串成 Groq -> Cerebras -> Gemini 的 fallback 鏈
+    if fallback and secondary:
+        secondary = LLMRouter(primary=secondary, fallback=fallback)
+    elif fallback:
+        secondary = fallback
+
+    if not primary and secondary:
+        primary = secondary
+        secondary = None
     if not primary:
         return None
 
-    n_primary = len(primary._clients) if isinstance(primary, KeyPoolClient) else 1
-    n_fallback = len(fallback._clients) if isinstance(fallback, KeyPoolClient) else (1 if fallback else 0)
-    log.info(f"LLM pool: primary={n_primary} key(s), fallback={n_fallback} key(s)")
+    def _pool_size(p):
+        return len(p._clients) if isinstance(p, KeyPoolClient) else (1 if p else 0)
 
-    return LLMRouter(primary=primary, fallback=fallback)
+    log.info(f"LLM pool: primary={_pool_size(primary)} key(s), secondary={_pool_size(secondary)} key(s)")
+
+    return LLMRouter(primary=primary, fallback=secondary)
 
 
 def normalize_query(q: str) -> str:
