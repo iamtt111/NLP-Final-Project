@@ -20,7 +20,7 @@ Image descriptions from: c1_vector-based_models.pdf
 
 [第16頁, 圖片1] 一個棕色紙袋的圖片，袋子上印有 "WORDS" 字樣，用以視覺化說明 Bag of Words（詞袋模型）的概念——將文本中的詞語視為裝在袋子裡的無序集合。
 
-[第17頁, 圖片1] "Order Matters: Example" 主題下的對比圖片。左側標示 "Dog Toy"（狗玩具），顯示一隻金毛犬與一個藍色環形狗咬膠玩具；右側標示 "Toy Dog"（玩具狗），顯示一隻米格魯外型的絨毛玩偶。兩組圖片使用相同的單字（Dog 和 Toy），但因順序不同而表達完全不同的意思，說明詞序的重要性。
+[第17頁, 圖片1] "Order Matters: Example" 主題下的兩張對比圖片。左側標示 "Dog Toy"（狗玩具），顯示一隻金毛犬與一個藍色環形狗咬膠玩具；右側標示 "Toy Dog"（玩具狗），顯示一隻米格魯外型的絨毛玩偶。兩組圖片使用相同的單字（Dog 和 Toy），但因順序不同而表達完全不同的意思，說明詞序的重要性。
 
 [第18頁, 圖片1] 手繪風格插圖，展示 Document（文件）轉換為 Bag of Words（詞袋）的過程。左側為一張紙，上面有手寫文字 "LDA is a great tool for summarizing text!"，標記為 "Document"、"Ordered Text"（有序文本）。右側為一個袋子形狀，裡面的文字被打亂排列（"for"、"great"、"LDA"、"tool" 等），標記為 "Bag of Words"、"Unordered Text"（無序文本）。中間有一個黑色箭頭表示轉換方向。
 
@@ -90,7 +90,7 @@ Image descriptions from: c1_vector-based_models.pdf
 
 [第72頁, 圖片1] 序列模型架構圖（Sequence of Vectors）。上方為 Transformer 架構示意圖，顯示多層注意力機制（Attention）的紫色矩陣圖，帶有閃電符號表示並行計算；下方為 RNN 架構示意圖，顯示紫色方塊依序連接的序列處理流程。用以說明 CNN、RNN 和 Transformer 等專門處理序列資料的模型架構。
 
-[第75頁, 圖片1] Word2Vec Skip-gram 架構圖。左側為 one-hot 編碼的輸入向量（Vocabulary，其中一個位置為 1），通過綠色的 V × N Embedding Matrix（嵌入矩陣）得到 Hidden Layer（隱藏層，h1 到 hn），再通過紫色的 N × V Context Matrix（上下文矩陣）產生右側的 Prediction Vectors（預測向量）。右側分為 First context word 和 Last context word 的機率輸出。整體展示 Skip-gram 模型從中心詞預測上下文詞的架構。
+[第75頁, 圖片1] Word2Vec Skip-gram 架構圖。左側為 one-hot 編碼的輸入向量（Vocabulary，其中一個位置為 1），通過綠色的 V × N Embedding Matrix（嵌入矩陣）得到 Hidden Layer（隱藏層，h1 到 hn），再通過紫色的 N × V Context Matrix（上下文矩陣）產生右側的 Prediction Vectors（預測向量）。右側分為 First context word 和 Last context word 的機率輸出。整體展示 Skip-gram（Skipgram）模型從中心詞預測上下文詞的架構。Skipgram 模型的訓練目標：給定目標詞（target word），預測周圍的上下文詞（surrounding context words）。
 
 [第76頁, 圖片1] 嵌入矩陣（Embedding Matrix）說明表格。表格兩欄：Word（詞）與 Learned Word Vector (Embedding Matrix)（學習到的詞向量）。三個範例：king 對應 [0.27, -0.63, 0.89, ...]、queen 對應 [0.31, -0.60, 0.85, ...]、apple 對應 [0.12, -0.78, 0.35, ...]。可見 king 和 queen 的向量較為接近，而 apple 則差異較大，說明語義相近的詞有相似的向量。
 
@@ -103,3 +103,5 @@ Image descriptions from: c1_vector-based_models.pdf
 [第86頁, 圖片1] NLP 應用於不同語言的多語言插圖。顯示多個卡通人物，每人旁邊有不同語言的對話泡泡，包括 English、Francais（法語）、Italiano（義大利語）、Espanol（西班牙語）、ελληνικά（希臘語）、Deutsch（德語）、日本の（日語）、中國的（中文）、русский（俄語）等。人物以簡約風格繪製，對話泡泡使用各種鮮豔顏色。
 
 [第89頁, 圖片1] 多語言模型（Multilingual Models）的向量空間示意圖。二維座標中顯示不同語言中意義相同的詞彙在向量空間中聚集在一起：上方群集包含 "cute puppy"（英文，紅色）、"chiot mignon"（法文，橘色）、"可爱的小狗"（中文，藍色）；下方群集包含 "nice weather"（英文，紅色）、"beau temps"（法文，橘色）、"好天气"（中文，藍色）。圖例標示 En（英文）、Fr（法文）、Zh（中文）三種語言的顏色對應。
+
+[文本前處理補充說明, Stemming 詞幹提取 vs Lemmatization 詞形還原] 文本前處理中，Stemming（詞幹提取）和 Lemmatization（詞形還原）都是將詞語還原為基本形式的技術，但運作方式有根本差異。Stemming 是粗暴的字尾截斷（suffix stripping）方法，直接按照規則機械式切除字尾，例如 "running" → "run"、"studies" → "studi"，不考慮詞語是否真實存在或其語法意義，速度快但準確度低，可能產生非標準詞根。Lemmatization（詞形還原）則依賴語言規則（linguistic rules）和詞典（dictionary），將詞語還原為真實存在的字典原型（lemma），例如 "better" → "good"（good 的比較級）、"ran" → "run"；Lemmatization 需要進行詞性標注（POS tagging）來判斷詞語的語法角色，準確度高但速度較慢。兩者主要差異：Stemming 是機械式字尾截斷，Lemmatization 是基於語言規則的語義還原；Stemming 不考慮詞的語法意義，Lemmatization 需要理解詞性和語言規則，結果是真實存在的詞語。

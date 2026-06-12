@@ -1,45 +1,45 @@
 Image descriptions from: c7_QA_system.pdf
 
-[第21頁, 圖片1] 此圖為 Retrieval Augmented Generation (RAG) 系統的完整架構圖。圖中由下而上展示了 RAG 的資料處理流程：最底層為 Text Documents（文字文件），以黃色方塊表示多個文件；這些文件經由 Embedding Model（灰色橫條區塊，帶有齒輪圖示）轉換為 Embeddings（深藍色方塊），共同組成 Vector Database（向量資料庫）。左側有一個紅色方塊代表 User Query（使用者查詢），同樣被轉為 embedding。中間層為 Nearest Neighbor Search（最近鄰搜尋，灰色橫條區塊），負責從所有 embeddings 中找出與查詢最相似的結果，產生 Nearest Neighbors（以深藍與黃色拼接的方塊表示）。最頂層為 LLM（大型語言模型，灰色橫條區塊），接收查詢與最近鄰結果後生成綠色的 Response（回應）。箭頭由下至上串聯整個流程，說明 RAG 如何結合檢索與生成來回答問題。
+[第21頁, 圖片1] Retrieval Augmented Generation (RAG) 系統的完整架構圖。圖中由下而上展示了 RAG 的資料處理流程：最底層為 Text Documents（文字文件），以黃色方塊表示多個文件；這些文件經由 Embedding Model（灰色橫條區塊，帶有齒輪圖示）轉換為 Embeddings（深藍色方塊），共同組成 Vector Database（向量資料庫）。左側有一個紅色方塊代表 User Query（使用者查詢），同樣被轉為 embedding。中間層為 Nearest Neighbor Search（最近鄰搜尋，灰色橫條區塊），負責從所有 embeddings 中找出與查詢最相似的結果，產生 Nearest Neighbors（以深藍與黃色拼接的方塊表示）。最頂層為 LLM（大型語言模型，灰色橫條區塊），接收查詢與最近鄰結果後生成綠色的 Response（回應）。箭頭由下至上串聯整個流程，說明 RAG 如何結合檢索與生成來回答問題。
 
-[第22頁, 圖片1] 此圖與第21頁相同的 RAG 架構圖，但額外以紅色方框標注了 Vector Database 的範圍，突顯 Embedding Model、Embeddings 和 Nearest Neighbor Search 這三個元件共同構成向量資料庫的概念。紅色框線清楚劃定了從 Embedding Model 到 Nearest Neighbor Search 之間的所有元件屬於 Vector Database 的一部分，幫助學生理解向量資料庫在 RAG 架構中的角色與邊界。
+[第22頁, 圖片1] 與第21頁相同的 RAG 架構圖，但額外以紅色方框標注了 Vector Database 的範圍，突顯 Embedding Model、Embeddings 和 Nearest Neighbor Search 這三個元件共同構成向量資料庫的概念。紅色框線清楚劃定了從 Embedding Model 到 Nearest Neighbor Search 之間的所有元件屬於 Vector Database 的一部分，幫助學生理解向量資料庫在 RAG 架構中的角色與邊界。
 
-[第26頁, 圖片1] 此投影片展示版面分析（Document Understanding）的概念，標題為「版面分析」。上方以紅色文字標示「由左至右，由上到下」的閱讀順序方向，並附帶一條紅色水平箭頭示意。下方嵌入了一個實際的學術論文網頁截圖，顯示 Natural Questions (NQ) 資料集的介紹頁面，包含 About Dataset、Context、Data Collection 等章節，用來說明版面分析的對象是如何從複雜文件中辨識結構。
+[第26頁, 圖片1] 投影片展示版面分析（Document Understanding）的概念，標題為「版面分析」。上方以紅色文字標示「由左至右，由上到下」的閱讀順序方向，並附帶一條紅色水平箭頭示意。下方嵌入了一個實際的學術論文網頁截圖，顯示 Natural Questions (NQ) 資料集的介紹頁面，包含 About Dataset、Context、Data Collection 等章節，用來說明版面分析的對象是如何從複雜文件中辨識結構。
 
-[第27頁, 圖片1] 此圖延續版面分析主題，展示了一篇學術論文的截圖，標題為「Digital Eavesdropper: Acoustic Speech Characteristics as Markers of Exacerbations in COPD Patients」。圖中以黃色螢光筆標記了 Abstract 區塊，並在右側以紅色文字標注「視為同一行」，說明版面分析系統需要能辨識出多欄排版中哪些內容在邏輯上屬於同一區塊，而非單純按照物理位置的由左至右排列。
+[第27頁, 圖片1] 延續版面分析主題，展示了一篇學術論文的截圖，標題為「Digital Eavesdropper: Acoustic Speech Characteristics as Markers of Exacerbations in COPD Patients」。圖中以黃色螢光筆標記了 Abstract 區塊，並在右側以紅色文字標注「視為同一行」，說明版面分析系統需要能辨識出多欄排版中哪些內容在邏輯上屬於同一區塊，而非單純按照物理位置的由左至右排列。
 
-[第28頁, 圖片1] 此投影片展示版面分析的四個步驟，左側列出：Block Detection / Segmentation、Element Classification、Reading Order Determination、Structured Output。右側為一個深色背景的文件版面示意圖，以灰色矩形區塊模擬一個網頁或文件頁面的典型佈局，包含頂部橫幅、內文區域、雙欄配置和底部元素等，用來視覺化說明版面分析需要辨識的各種區塊結構。
+[第28頁, 圖片1] 投影片展示版面分析的四個步驟，左側列出：Block Detection / Segmentation、Element Classification、Reading Order Determination、Structured Output。右側為一個深色背景的文件版面示意圖，以灰色矩形區塊模擬一個網頁或文件頁面的典型佈局，包含頂部橫幅、內文區域、雙欄配置和底部元素等，用來視覺化說明版面分析需要辨識的各種區塊結構。
 
-[第29頁, 圖片1] 此圖為 Block Detection / Segmentation 的說明。右側顯示與第28頁相同的深色文件版面示意圖，但此版本中各區塊以白色虛線框（Bounding Boxes）標示出來，展示系統如何掃描整個頁面、找出所有有內容的矩形區域。左側文字說明這些區塊此時系統還不知道其身分，只知道該位置有墨水或像素存在。
+[第29頁, 圖片1] Block Detection / Segmentation 的說明。右側顯示與第28頁相同的深色文件版面示意圖，但此版本中各區塊以白色虛線框（Bounding Boxes）標示出來，展示系統如何掃描整個頁面、找出所有有內容的矩形區域。左側文字說明這些區塊此時系統還不知道其身分，只知道該位置有墨水或像素存在。
 
-[第31頁, 圖片1] 此圖為 Element Classification 的說明。右側展示一個深色背景的文件版面分析結果，各個區塊已被標記上不同的分類標籤，包括「標題」、「作者」、「摘要」、「內文」（出現多次）、「圖片」（以橘色邊框標示）、「表格」（以紫色邊框標示）、「圖說」（以綠色標籤標示）和「雜訊」等。各標籤以黑底白字的橢圓形氣泡呈現，不同類型的區塊以不同顏色的邊框區分（藍色代表內文、橘色代表圖片、紫色代表表格、綠色代表圖說），展示系統如何判定每個 Bounding Box 的語意身分。
+[第31頁, 圖片1] Element Classification 的說明。右側展示一個深色背景的文件版面分析結果，各個區塊已被標記上不同的分類標籤，包括「標題」、「作者」、「摘要」、「內文」（出現多次）、「圖片」（以橘色邊框標示）、「表格」（以紫色邊框標示）、「圖說」（以綠色標籤標示）和「雜訊」等。各標籤以黑底白字的橢圓形氣泡呈現，不同類型的區塊以不同顏色的邊框區分（藍色代表內文、橘色代表圖片、紫色代表表格、綠色代表圖說），展示系統如何判定每個 Bounding Box 的語意身分。
 
-[第32頁, 圖片1] 此圖為 Reading Order Determination 的說明。右側展示深色背景的文件版面圖，上面繪製了白色箭頭路徑和圓形節點，標示出正確的閱讀順序。箭頭從頁面頂部的標題開始，先向下到摘要，接著進入左欄，讀完左欄後再跳到右欄的對應位置，最後底部的「排除」標籤表示頁碼等元素被過濾掉。這些箭頭路徑展示了機器需要判斷人類眼睛如何在文件中移動，而非粗暴地由左至右、由上至下閱讀。
+[第32頁, 圖片1] Reading Order Determination 的說明。右側展示深色背景的文件版面圖，上面繪製了白色箭頭路徑和圓形節點，標示出正確的閱讀順序。箭頭從頁面頂部的標題開始，先向下到摘要，接著進入左欄，讀完左欄後再跳到右欄的對應位置，最後底部的「排除」標籤表示頁碼等元素被過濾掉。這些箭頭路徑展示了機器需要判斷人類眼睛如何在文件中移動，而非粗暴地由左至右、由上至下閱讀。
 
-[第33頁, 圖片1] 此投影片標題為 Structured Output，展示未經版面分析處理的文件文字範例。右側有一個白色方框，內容為一段混亂的純文字輸出，將標題、作者、摘要、內文、表格數據和圖片亂碼全部混在一起，沒有任何結構。紅色文字標注「未經分析的範例」，用來對比說明不經過版面分析直接提取文字會產生多大的問題。
+[第33頁, 圖片1] 投影片標題為 Structured Output，展示未經版面分析處理的文件文字範例。右側有一個白色方框，內容為一段混亂的純文字輸出，將標題、作者、摘要、內文、表格數據和圖片亂碼全部混在一起，沒有任何結構。紅色文字標注「未經分析的範例」，用來對比說明不經過版面分析直接提取文字會產生多大的問題。
 
-[第34頁, 圖片1] 此投影片同樣標題為 Structured Output，展示經過版面分析後的兩種結構化輸出格式。左側為 JSON 結構化格式（深色背景的程式碼區塊），以綠色字體顯示 element_type、text、metadata 等欄位，包含 bounding_box 座標和 parent_section 等資訊，適合 Chunking 階段使用。右側為 Markdown 結構化格式（白色背景的文件區塊），將同樣的內容轉換為帶有標題層級（#、##）、粗體、表格和圖片引用的 Markdown 語法，適合餵給 LLM 使用。底部以紅色和藍色文字分別標注兩種格式的用途。
+[第34頁, 圖片1] 投影片同樣標題為 Structured Output，展示經過版面分析後的兩種結構化輸出格式。左側為 JSON 結構化格式（深色背景的程式碼區塊），以綠色字體顯示 element_type、text、metadata 等欄位，包含 bounding_box 座標和 parent_section 等資訊，適合 Chunking 階段使用。右側為 Markdown 結構化格式（白色背景的文件區塊），將同樣的內容轉換為帶有標題層級（#、##）、粗體、表格和圖片引用的 Markdown 語法，適合餵給 LLM 使用。底部以紅色和藍色文字分別標注兩種格式的用途。
 
-[第38頁, 圖片1] 此投影片標題為 Chunking，展示文字切塊的概念。上方文字說明 LLM 和 Embedding 模型都有 Context Window 的長度限制。左下方為一段灰色背景的長篇文字，描述大型語言模型評估的內容。右側為切塊後的結果，展示四個深色背景的區塊（區塊 #1 至 #4），每個區塊標注了字數（100字或84字），以藍色標題和白色內文呈現。此圖直觀地展示了將長文章切分為多個較小區塊的過程，以及每個區塊的大小控制。
+[第38頁, 圖片1] 投影片標題為 Chunking，展示文字切塊的概念。上方文字說明 LLM 和 Embedding 模型都有 Context Window 的長度限制。左下方為一段灰色背景的長篇文字，描述大型語言模型評估的內容。右側為切塊後的結果，展示四個深色背景的區塊（區塊 #1 至 #4），每個區塊標注了字數（100字或84字），以藍色標題和白色內文呈現。此圖直觀地展示了將長文章切分為多個較小區塊的過程，以及每個區塊的大小控制。
 
-[第40頁, 圖片1] 此圖標題為 Embeddings，展示文字和圖片轉換為向量表示的流程。上半部分展示 N-Texts（多個文件圖示）經由 NLP 模型（齒輪圖示，旁邊有黃色圓點裝飾）轉換為 N-Word Embeddings（一列數值方格，顯示 0.3、0.02、0.8、0.6、...、0.4 等數值）。下半部分展示 N-Images（多張橘色線條繪製的狗圖片）經由 CNN/Vision Transformer（齒輪圖示）轉換為 N-Image Embeddings（同樣的數值方格格式）。箭頭由左至右串聯各步驟，說明不論是文字或圖片都可以被轉換為同一種向量表示形式。
+[第40頁, 圖片1] 圖標題為 Embeddings，展示文字和圖片轉換為向量表示的流程。上半部分展示 N-Texts（多個文件圖示）經由 NLP 模型（齒輪圖示，旁邊有黃色圓點裝飾）轉換為 N-Word Embeddings（一列數值方格，顯示 0.3、0.02、0.8、0.6、...、0.4 等數值）。下半部分展示 N-Images（多張橘色線條繪製的狗圖片）經由 CNN/Vision Transformer（齒輪圖示）轉換為 N-Image Embeddings（同樣的數值方格格式）。箭頭由左至右串聯各步驟，說明不論是文字或圖片都可以被轉換為同一種向量表示形式。
 
-[第41頁, 圖片1] 此圖標題為 Multimodel Vector DB，展示 CLIP 模型（Contrastive Language-Image Pre-Training）的架構。圖中分為三個部分：(1) Contrastive pre-training 階段，左側展示文字（如 "Pepper the aussie pup"）經 Text Encoder 產生 T1 到 TN 的向量，圖片經 Image Encoder 產生 I1 到 IN 的向量，中間形成一個 NxN 的相似度矩陣，對角線以藍色標示為正樣本；(2) Create dataset classifier from label text 階段，展示如何將類別標籤（plane、car、dog、bird）轉為文字向量；(3) Use for zero-shot prediction 階段，展示圖片如何透過與標籤向量的相似度比對進行零樣本分類。左側紅色文字標注 Embeddings represent text & image features。來源為 https://github.com/openai/CLIP。
+[第41頁, 圖片1] 圖標題為 Multimodel Vector DB，展示 CLIP 模型（Contrastive Language-Image Pre-Training）的架構。圖中分為三個部分：(1) Contrastive pre-training 階段，左側展示文字（如 "Pepper the aussie pup"）經 Text Encoder 產生 T1 到 TN 的向量，圖片經 Image Encoder 產生 I1 到 IN 的向量，中間形成一個 NxN 的相似度矩陣，對角線以藍色標示為正樣本；(2) Create dataset classifier from label text 階段，展示如何將類別標籤（plane、car、dog、bird）轉為文字向量；(3) Use for zero-shot prediction 階段，展示圖片如何透過與標籤向量的相似度比對進行零樣本分類。左側紅色文字標注 Embeddings represent text & image features。來源為 https://github.com/openai/CLIP。
 
-[第42頁, 圖片1] 此圖標題為 Image Querying，展示以圖搜圖的流程。左側為一張秋田犬的查詢圖片（Query），經過藍色齒輪圖示的 CLIP Embeddings 模型轉為向量，再送入藍色圓柱形的 Vector DB 進行搜尋，最右側輸出一張相似的秋田犬結果圖片（Result）。箭頭由左至右串聯整個流程，說明多模態向量資料庫可以支援以圖搜圖的功能。
+[第42頁, 圖片1] 圖標題為 Image Querying，展示以圖搜圖的流程。左側為一張秋田犬的查詢圖片（Query），經過藍色齒輪圖示的 CLIP Embeddings 模型轉為向量，再送入藍色圓柱形的 Vector DB 進行搜尋，最右側輸出一張相似的秋田犬結果圖片（Result）。箭頭由左至右串聯整個流程，說明多模態向量資料庫可以支援以圖搜圖的功能。
 
-[第43頁, 圖片1] 此圖標題為 Text Querying，展示以文搜圖的流程。左側為一個藍色方框內的文字查詢 "dog in grassland"（Query），經過藍色齒輪圖示的 CLIP Embeddings 模型轉為向量，再送入藍色圓柱形的 Vector DB 搜尋，最右側輸出一張草地上的黑色大狗照片（Result）。此圖說明 CLIP 模型能將文字和圖片映射到同一向量空間，實現跨模態的文字搜圖功能。
+[第43頁, 圖片1] 圖標題為 Text Querying，展示以文搜圖的流程。左側為一個藍色方框內的文字查詢 "dog in grassland"（Query），經過藍色齒輪圖示的 CLIP Embeddings 模型轉為向量，再送入藍色圓柱形的 Vector DB 搜尋，最右側輸出一張草地上的黑色大狗照片（Result）。此圖說明 CLIP 模型能將文字和圖片映射到同一向量空間，實現跨模態的文字搜圖功能。
 
-[第46頁, 圖片1] 此投影片標題為 Hierarchical Navigable Small World (HNSW)，右側展示 HNSW 演算法的分層圖結構示意圖。圖中有三層透視的平面，由上到下節點越來越密集。最上層只有少數節點（用灰色和藍色橢圓表示）並以線段連接，標注 entry point（藍色實心橢圓）為搜尋起點。中間層節點更多，有更密集的連結。最底層節點最多，以斜線填充的灰色橢圓表示，其中黃色橢圓標注為 query vector，粉紅色文字標注 nearest neighbor。藍色箭頭展示從 entry point 逐層往下搜尋、逐步靠近目標的路徑。此圖來源為 https://www.pinecone.io/learn/series/faiss/hnsw/。
+[第46頁, 圖片1] 投影片標題為 Hierarchical Navigable Small World (HNSW)，右側展示 HNSW 演算法的分層圖結構示意圖。圖中有三層透視的平面，由上到下節點越來越密集。最上層只有少數節點（用灰色和藍色橢圓表示）並以線段連接，標注 entry point（藍色實心橢圓）為搜尋起點。中間層節點更多，有更密集的連結。最底層節點最多，以斜線填充的灰色橢圓表示，其中黃色橢圓標注為 query vector，粉紅色文字標注 nearest neighbor。藍色箭頭展示從 entry point 逐層往下搜尋、逐步靠近目標的路徑。此圖來源為 https://www.pinecone.io/learn/series/faiss/hnsw/。
 
-[第49頁, 圖片1] 此投影片展示 Inverted File Index (IVF) 演算法。右側為一個向量空間的二維散點圖，其中資料點以不同顏色的 x 標記表示（紅色、紫色、藍色/青色、黑色、綠色），分別屬於 #1 到 #5 五個不同的分區（cell）。分區之間以灰色線條劃分邊界（類似 Voronoi 圖），每個分區的中心以黑色圓點標示。此圖直觀展示了 IVF 如何使用 K-means 將向量空間預先切分為多個區域，查詢時只需在最接近的幾個區域內比對，大幅減少搜尋範圍。
+[第49頁, 圖片1] 投影片展示 Inverted File Index (IVF) 演算法。右側為一個向量空間的二維散點圖，其中資料點以不同顏色的 x 標記表示（紅色、紫色、藍色/青色、黑色、綠色），分別屬於 #1 到 #5 五個不同的分區（cell）。分區之間以灰色線條劃分邊界（類似 Voronoi 圖），每個分區的中心以黑色圓點標示。此圖直觀展示了 IVF 如何使用 K-means 將向量空間預先切分為多個區域，查詢時只需在最接近的幾個區域內比對，大幅減少搜尋範圍。Metadata 的作用是儲存向量時同時存入文件檔名、作者、日期等結構化資訊，查詢時先用 metadata 條件過濾縮小候選範圍，再以 IVF 在最相關的 cell 內做向量相似度比對；兩者協同可同時提升查詢速度（避免全庫遍歷）與精準度（先過濾再比對）。
 
-[第50頁, 圖片1] 此圖為 Product Quantization (PQ) 演算法的流程示意圖。從上到下展示：最頂部為一條黃色長條代表 original vector（原始向量），向下箭頭將其切分為四段黃色短條代表 subvectors（子向量）。每段子向量旁邊展示 clustering 過程，以彩色圓點（紅、黃、藍、綠等）表示 centroids 和 subvector 之間的距離關係，找到 closest centroid。接著向下產生四段不同顏色的 quantized vectors（紅、綠、藍、綠色方塊）。最底部顯示對應的 PQ code（50、118、29、47）和 reproduction values。整個流程展示了如何將高維向量壓縮為低維編碼以加速比對。來源為 https://towardsdatascience.com/similarity-search-product-quantization。
+[第50頁, 圖片1] Product Quantization (PQ) 演算法的流程示意圖。從上到下展示：最頂部為一條黃色長條代表 original vector（原始向量），向下箭頭將其切分為四段黃色短條代表 subvectors（子向量）。每段子向量旁邊展示 clustering 過程，以彩色圓點（紅、黃、藍、綠等）表示 centroids 和 subvector 之間的距離關係，找到 closest centroid。接著向下產生四段不同顏色的 quantized vectors（紅、綠、藍、綠色方塊）。最底部顯示對應的 PQ code（50、118、29、47）和 reproduction values。整個流程展示了如何將高維向量壓縮為低維編碼以加速比對。來源為 https://towardsdatascience.com/similarity-search-product-quantization。
 
-[第54頁, 圖片1] 此投影片標題為「RAG 與 Fine-tuning 比較」，展示一個比較表格。表格有三欄（比較項目、Fine-tuning、RAG）和四列：可更新性（需重新訓練 vs 可即時查詢）、成本（高 vs 低）、知識更新（難 vs 容易）、幻覺控制（部分有效 vs 可降低風險）。此表格清楚對比了兩種讓 LLM 具備新知識的方法在各個面向的優劣差異。
+[第54頁, 圖片1] 投影片標題為「RAG 與 Fine-tuning 比較」，展示一個比較表格。表格有三欄（比較項目、Fine-tuning、RAG）和四列：可更新性（需重新訓練 vs 可即時查詢）、成本（高 vs 低）、知識更新（難 vs 容易）、幻覺控制（部分有效 vs 可降低風險）。此表格清楚對比了兩種讓 LLM 具備新知識的方法在各個面向的優劣差異。
 
-[第67頁, 圖片1] 此投影片標題為「如何融合？」，展示 Hybrid Search 中兩種融合方法的數學公式。上半部為 Weighted Fusion 方法，以灰色背景方框顯示公式 Final_Score = alpha * Dense_Score + (1 - alpha) * Sparse_Score，其中 alpha 為可調整的權重參數。下半部為 RRF (Reciprocal Rank Fusion) 方法，同樣以灰色背景方框顯示公式 RRF_Score(d) = sum over r in R of 1/(k + rank_r(d))，其中 R 為檢索器集合、r 為單一檢索器、rank_r(d) 為文件在檢索器中的排名、k 為平滑常數（通常為60）。
+[第67頁, 圖片1] 投影片標題為「如何融合？」，展示 Hybrid Search 中兩種融合方法的數學公式。上半部為 Weighted Fusion 方法，以灰色背景方框顯示公式 Final_Score = alpha * Dense_Score + (1 - alpha) * Sparse_Score，其中 alpha 為可調整的權重參數。下半部為 RRF (Reciprocal Rank Fusion) 方法，同樣以灰色背景方框顯示公式 RRF_Score(d) = sum over r in R of 1/(k + rank_r(d))，其中 R 為檢索器集合、r 為單一檢索器、rank_r(d) 為文件在檢索器中的排名、k 為平滑常數（通常為60）。
 
-[第75頁, 圖片1] 此圖為 Modular RAG 的架構圖，來自論文 Gao et al. (2023)。圖分為上下兩部分：上方為 Modules 區塊，以藍色虛線圓角方框展示 RAG 系統的各個模組，包括 Search、Predict、Routing、Retrieve、Rewrite、Rerank、Read、Demonstrate、Memory、Fusion 等，模組之間以藍色虛線箭頭連接表示可組合的關係。下方為 Patterns 區塊，展示四種不同的 RAG 配置模式：Naive RAG（Retrieve -> Read）、Advanced RAG（Rewrite -> Retrieve -> Rerank -> Read）、DSP（Demonstrate -> Search -> Predict）、ITER-RETGEN（Retrieve -> Read -> Retrieve -> Read 的迭代模式）。右側文字說明 Search Module（使用外部工具搜尋）、Memory Module（跨輪對話記憶）和 Routing Module（根據問題選擇資料來源）的功能。
+[第75頁, 圖片1] Modular RAG 的架構圖，來自論文 Gao et al. (2023)。圖分為上下兩部分：上方為 Modules 區塊，以藍色虛線圓角方框展示 RAG 系統的各個模組，包括 Search、Predict、Routing、Retrieve、Rewrite、Rerank、Read、Demonstrate、Memory、Fusion 等，模組之間以藍色虛線箭頭連接表示可組合的關係。下方為 Patterns 區塊，展示四種不同的 RAG 配置模式：Naive RAG（Retrieve -> Read）、Advanced RAG（Rewrite -> Retrieve -> Rerank -> Read）、DSP（Demonstrate -> Search -> Predict）、ITER-RETGEN（Retrieve -> Read -> Retrieve -> Read 的迭代模式）。右側文字說明 Search Module（使用外部工具搜尋）、Memory Module（跨輪對話記憶）和 Routing Module（根據問題選擇資料來源）的功能。
 
-[第78頁, 圖片1] 此圖為 GraphRAG pipeline 的架構圖，來自論文 Edge et al. (2024) "From local to global: A graph rag approach to query-focused summarization"。圖分為左右兩條路徑：左側為 Indexing Time（索引階段），由上至下依序為 Source Documents（淡紫色方框）經 text extraction and chunking 產生 Text Chunks（淡藍色方框），再經 domain-tailored summarization 提取 Entities & Relationships（淡藍色方框），接著建立 Knowledge Graph（淡藍色方框），透過 community detection 產生 Graph Communities（淡藍色方框）。右側為 Query Time（查詢階段），由下至上依序經過 domain-tailored summarization 產生 Community Summaries（淡藍色方框），再經 query-focused summarization 產生 Community Answers（淡紫色方框），最終生成 Global Answer（淡紫色方框）。底部以表格形式標注 Pipeline Stage 分為 Indexing Time 和 Query Time 兩個階段。下方附有論文的完整說明文字，解釋整個 graph index 如何透過實體、關係和社群偵測來支援全局性的問答。
+[第78頁, 圖片1] GraphRAG pipeline 的架構圖，來自論文 Edge et al. (2024) "From local to global: A graph rag approach to query-focused summarization"。圖分為左右兩條路徑：左側為 Indexing Time（索引階段），由上至下依序為 Source Documents（淡紫色方框）經 text extraction and chunking 產生 Text Chunks（淡藍色方框），再經 domain-tailored summarization 提取 Entities & Relationships（淡藍色方框），接著建立 Knowledge Graph（淡藍色方框），透過 community detection 產生 Graph Communities（淡藍色方框）。右側為 Query Time（查詢階段），由下至上依序經過 domain-tailored summarization 產生 Community Summaries（淡藍色方框），再經 query-focused summarization 產生 Community Answers（淡紫色方框），最終生成 Global Answer（淡紫色方框）。底部以表格形式標注 Pipeline Stage 分為 Indexing Time 和 Query Time 兩個階段。下方附有論文的完整說明文字，解釋整個 graph index 如何透過實體、關係和社群偵測來支援全局性的問答。
