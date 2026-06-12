@@ -73,7 +73,7 @@ with col_csv:
         st.stop()
 
     selected_csv = st.selectbox(
-        "選擇測資 CSV",
+        "選擇測資 CSV (請先將測資放到 input/)",
         csv_files,
         format_func=lambda p: p.name,
     )

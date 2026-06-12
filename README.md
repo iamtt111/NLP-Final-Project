@@ -61,9 +61,57 @@
 
 ## 快速開始
 
-`run.bat`       #一鍵執行
+### run.bat — 一鍵執行（CLI）
 
-`run_ui.bat`    # 一鍵執行 (UI版)
+雙擊 `run.bat`，腳本自動完成以下流程：
+
+1. **虛擬環境建置** — 自動檢查並建置 `venv`
+2. **依賴套件安裝** — 靜默安裝 `requirements.txt` 中的所有套件
+3. **金鑰引導** — 若無 `.env` 檔案，自動複製範本並以記事本引導填寫
+4. **增量索引重建** — 自動比對 `corpus/` 教材修改時間與 `data/bm25_cache.pkl`；有更新才重構索引，否則跳過
+
+---
+
+### run_ui.bat — Streamlit 網頁審閱介面
+
+雙擊 `run_ui.bat`，瀏覽器自動開啟網頁介面（預設：`http://localhost:8501`）
+
+![Streamlit 網頁審閱介面](StreamlitUI.png)
+
+#### 步驟一：選擇測資與填寫 API 金鑰
+
+在「設定」區塊中：
+
+- **測資 CSV**：從下拉選單選擇 `input/` 底下的測資檔案；選取後顯示問題總數，可展開「預覽前 5 題」確認內容
+- **Groq API Keys**：每行一把，最多 4 把；主要問答通路（`llama-3.3-70b-versatile`）
+- **Cerebras API Keys**：每行一把，最多 4 把；第二主力通路（`gpt-oss-120b`）
+- **Gemini API Keys**：每行一把，最多 4 把；最終備援通路（`gemini-2.5-flash`）
+
+> 若 `.env` 中已設定 `GROQ_API_KEY` / `CEREBRAS_API_KEY` / `GEMINI_API_KEY`，啟動時會自動預填並提示「已偵測到 N 把金鑰」
+
+#### 步驟二：執行批次問答
+
+點擊「開始問答」按鈕。系統依金鑰池大小自動決定 `workers` 數並平行處理，進度條即時顯示 `平行執行中... (N/總題數)`，下方滾動狀態看板顯示最新完成題目
+
+#### 步驟三：審閱結果指標
+
+問答完成後，「結果」區塊呈現：
+
+- **Layer Metrics 看板** — 統計各備援層命中數：
+
+  | 指標 | 說明 |
+  |------|------|
+  | `cache` | SHA-256 快取命中（0 ms） |
+  | `rule_factoid` / `rule_definition` | 規則層抽取，免除 LLM 呼叫 |
+  | `llm` | 流經 Groq / Cerebras / Gemini 模型生成 |
+  | `sentence_picker` | 降級選句 |
+
+- **問答結果表格** — 互動式分頁表格，顯示每題的「問題」、「答案」、「Layer」，可搜尋與排序
+
+#### 步驟四：匯出結果
+
+- **自動儲存**：執行完成時已自動寫入 `output/`，檔名含時間戳記（如 `questions_20260612_120000.csv`）
+- **網頁下載**：點擊「下載結果 CSV」按鈕直接匯出；輸出採 `utf-8-sig` 編碼，Excel 開啟無亂碼
 
 ## 設定說明（`settings.json`）
 
